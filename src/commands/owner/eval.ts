@@ -8,6 +8,7 @@ export default class extends Command {
             description: "Evaluate a TypeScript code.",
             aliases: ["ev"],
             category: "OwnerOnly",
+            cooldown: 3,
             ownerOnly: true
         })
     }
@@ -18,10 +19,8 @@ export default class extends Command {
          
         let code = args.join(" ");
 
-        if(!code) return message.channel.createMessage("You haven't provided a code to evaluate.")
-
         const result = this.clean(eval(code));
-        return message.channel.send({ content: result, code: "js" })
+        return message.reply({ content: `\`\`\`js\n${result}\n\`\`\`` })
 
      } catch(e) {
        return message.channel.send({ content: `An error occured:\n \`\`\`js\n${e}\n\`\`\`` })

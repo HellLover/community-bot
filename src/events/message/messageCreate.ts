@@ -1,5 +1,3 @@
-// TODO: fix
-
 import { Event } from "../../structures/Events";
 import { Client } from "../../handlers/ClientHandler";
 import * as DJS from "discord.js";
@@ -10,7 +8,6 @@ export default class extends Event {
     }
 
     async execute(client: Client, message: DJS.Message) {
-      try {
         if (message.author.bot || !message.guild) return;
 
         let prefix = client.config.prefix;
@@ -54,8 +51,8 @@ export default class extends Event {
             return message.reply({ content: `You're missing the following permission(s) to execute the command — **${this.client.utils.missingPerms}**` });
         }
 
-        command.execute(client, message, args)
-
+        try {
+           command.execute(client, message, args)
         } catch(e) {
             console.log(e)
         }

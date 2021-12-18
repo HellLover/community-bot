@@ -8,7 +8,7 @@ interface CommandOptions {
     category?: string;
     memberPermission?: any[];
     botPermission?: any[];
-    cooldown?: string;
+    cooldown?: number;
     ownerOnly?: boolean;
 }
 
@@ -21,20 +21,20 @@ export default class Command {
     category: string | null;
     memberPermission: any[];
     botPermission: any[];
-    cooldown: string | null;
+    cooldown: number| null;
     ownerOnly: boolean;
 
     constructor(client: Client, name: string, options: CommandOptions) {
         this.client = client;
-        this.name = options!.name || name;
-        this.description = options!.description || null;
-        this.usage = options!.usage || null;
-        this.aliases = options!.aliases || [];
-        this.category = options!.category || null;
-        this.memberPermission = options!.memberPermission || [];
-        this.botPermission = options!.botPermission || [];
-        this.cooldown = options!.cooldown || null;
-        this.ownerOnly = options!.ownerOnly || false;
+        this.name = options.name || name;
+        this.description = options.description || null;
+        this.usage = options.usage || null;
+        this.aliases = options.aliases || [];
+        this.category = options.category || null;
+        this.memberPermission = options.memberPermission || [];
+        this.botPermission = options.botPermission || [];
+        this.cooldown = options.cooldown || null;
+        this.ownerOnly = options.ownerOnly || false;
     }
 
 }

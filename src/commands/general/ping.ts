@@ -11,6 +11,6 @@ export default class extends Command {
     }
 
     async execute(client, message, args) {
-        message.channel.send({ content: "Pong!" })
+        message.channel.send({ content: `Pong!` })
     }
 }
