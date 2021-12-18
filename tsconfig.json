@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "ESNEXT",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "strict": true,
+      "esModuleInterop": true,
+      "strictPropertyInitialization": false,
+      "skipLibCheck": false,
+      "inlineSourceMap": true,
+      "noImplicitAny": false,
+      "allowJs": true,
+      "checkJs": true
+    }
+  }

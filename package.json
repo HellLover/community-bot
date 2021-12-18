@@ -1,0 +1,36 @@
+{
+  "name": "community-bot",
+  "version": "1.0.0",
+  "description": "A community bot for Dolphin's Squad made with TypeScript & Eris",
+  "main": "./src/main.ts",
+  "scripts": {
+    "bot": "npx ts-node-dev ."
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HellLover/community-bot.git"
+  },
+  "author": "HellLover",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HellLover/community-bot/issues"
+  },
+  "homepage": "https://github.com/HellLover/community-bot#readme",
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/node": "^16.11.11",
+    "ts-node": "^10.4.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
+    "glob": "^7.2.0",
+    "moment": "^2.29.1",
+    "ms": "^2.1.3"
+  }
+}
