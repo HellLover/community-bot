@@ -7,10 +7,12 @@ export default class extends Event {
         super(client, "messageCreate");
     }
 
-    async execute(client: Client, message: DJS.Message) {
+    async execute(client: Client, message: DJS.Message<true>) {
         if (message.author.bot || !message.guild) return;
 
-        let prefix = client.config.prefix;
+        const GuildData = await this.client.utils.getGuildInDB(message.guild?.id)
+
+        let prefix = GuildData.prefix;
   
         if (!message.content.startsWith(prefix)) return;
 
