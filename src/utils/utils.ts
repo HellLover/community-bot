@@ -122,4 +122,16 @@ export default class ClientUtils {
         }
       }
 
+      async findRole(message: DJS.Message, arg: DJS.Snowflake): Promise<DJS.Role | null> {
+        if(!message.guild) return null;
+
+        return(
+          message.mentions.roles.first() ||
+          message.guild.roles.cache.get(arg) ||
+          message.guild.roles.cache.find((r) => r.name === arg) ||
+          message.guild.roles.cache.find((r) => r.name.startsWith(arg)) ||
+          message.guild.roles.fetch(arg)
+        )
+      }
+
    }

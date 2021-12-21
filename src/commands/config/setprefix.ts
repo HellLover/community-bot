@@ -6,7 +6,7 @@ export default class extends Command {
         super(client, "setprefix", {
             description: "Change the bot's prefix.",
             aliases: [],
-            category: "Administrative",
+            category: "Config",
             memberPermission: ["ADMINISTRATOR"]
         })
     }

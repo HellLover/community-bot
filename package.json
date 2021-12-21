@@ -1,7 +1,7 @@
 {
   "name": "community-bot",
   "version": "1.0.0",
-  "description": "A community bot for Dolphin's Squad made with TypeScript & Eris",
+  "description": "An example bot written in TypeScript & discord.js@13.3.1",
   "main": "./src/main.ts",
   "scripts": {
     "bot": "npx ts-node-dev ."
@@ -27,6 +27,8 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
+    "@discordjs/opus": "^0.7.0",
+    "discord-player": "^5.2.0",
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
     "events": "^3.3.0",

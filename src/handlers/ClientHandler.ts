@@ -28,6 +28,7 @@ export class Client extends DJS.Client {
         this.utils = new ClientUtils(this);
         this.database = new Database(this);
         this.cache = new CacheStorage();
+
     }
 
     async register(token: string) {
