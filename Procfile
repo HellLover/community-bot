@@ -1,1 +1,1 @@
-worker: npx ts-node-dev .
+worker: npm run bot
