@@ -56,7 +56,7 @@ export default class extends Event {
         try {
            command.execute(client, message, args)
         } catch(e) {
-            console.log(e)
+            this.client.logger.error(e)
         }
     }
     

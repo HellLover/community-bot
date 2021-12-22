@@ -16,7 +16,7 @@ const CommandHandler = (client) => {
             }
         }
 
-    console.log(`[COMMANDS] Loaded ${client.commands.size} commands!`)
+    client.logger.log(`[COMMANDS] Loaded ${client.commands.size} commands!`)
 
 }
 

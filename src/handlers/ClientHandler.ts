@@ -5,6 +5,7 @@ import EventHandler from "../handlers/EventHandler";
 import ClientUtils from '../utils/utils';
 import { Database } from '../database/Database';
 import { CacheStorage } from '../database/CacheStorage';
+import { Logger } from '../utils/Logger';
 import { config } from "../config";
 
 export class Client extends DJS.Client {
@@ -16,6 +17,7 @@ export class Client extends DJS.Client {
     cooldowns: Map<any, any>;
     config: typeof config;
     utils: ClientUtils;
+    logger: Logger;
 
     constructor(options: DJS.ClientOptions) {
         super(options);
@@ -28,6 +30,7 @@ export class Client extends DJS.Client {
         this.utils = new ClientUtils(this);
         this.database = new Database(this);
         this.cache = new CacheStorage();
+        this.logger = new Logger(null);
 
     }
 

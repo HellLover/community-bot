@@ -8,6 +8,6 @@ export default class extends Event {
 
     async execute() {
         this.client?.user?.setActivity("Dolphin's Squad", { type: "STREAMING", url: "https://www.youtube.com/watch?v=gSo9E5FbbOg&ab_channel=Flameex" })
-        console.log(`Connected as ${this.client?.user?.tag}!`)
+        this.client?.logger?.log(`[CONNECTION] Connected as ${this.client?.user?.tag}!`)
     }
 }

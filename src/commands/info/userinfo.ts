@@ -25,8 +25,8 @@ export default class extends Command {
             web: "🌐 Browser"
         }
 
-        const member = await this.client.utils.findMember(message, args)
-        if(!member) return message.reply({ content: "Please, mention someone for this command."})
+        const member = await this.client.utils.findMember(message, args, { allowAuthor: true })
+        if(!member) return message.reply({ content: "Please, provide a mention/tag/id for this command."})
 
         const embed = new MessageEmbed()
         .setColor("BLUE")

@@ -10,7 +10,7 @@ const EventHandler = (client) => {
             client.events.set(event.name, event);
             event.once === true ? client.once(name, (...args) => event.execute(client, ...args)) : client.on(name, (...args) => event.execute(client, ...args))
         }
-        console.log(`[EVENTS] Loaded ${client.events.size} events!`)
+        client.logger.log(`[EVENTS] Loaded ${client.events.size} events!`)
     }
 
 export default EventHandler;

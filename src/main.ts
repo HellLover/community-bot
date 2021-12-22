@@ -12,5 +12,5 @@ const client = new Client({
 client.register(process.env.BOT_TOKEN as string);
 
 client.database.on("ready", () => {
-    console.log("Connected to database!")
+    client.logger.log("[DATABASE] Connected to the database!")
 })
