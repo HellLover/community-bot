@@ -49,7 +49,6 @@ export default class extends Command {
                 new MessageEmbed()
                 .setColor(color)
                 .setDescription(desc)
-                .setTimestamp()
             ]
         })
     }

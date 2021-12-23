@@ -11,9 +11,9 @@ import { config } from "../config";
 export class Client extends DJS.Client {
     database: Database;
     cache: CacheStorage<any>;
-    commands: Map<any, any>;
-    events: Map<any, any>;
-    aliases: Map<any, any>;
+    commands: DJS.Collection<any, any>;
+    events: DJS.Collection<any, any>;
+    aliases: DJS.Collection<any, any>;
     cooldowns: Map<any, any>;
     config: typeof config;
     utils: ClientUtils;
@@ -22,9 +22,9 @@ export class Client extends DJS.Client {
     constructor(options: DJS.ClientOptions) {
         super(options);
 
-        this.commands = new Map();
-        this.events = new Map();
-        this.aliases = new Map();
+        this.commands = new DJS.Collection();
+        this.events = new DJS.Collection();
+        this.aliases = new DJS.Collection();
         this.cooldowns = new Map();
         this.config = config;
         this.utils = new ClientUtils(this);

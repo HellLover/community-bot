@@ -5,7 +5,7 @@ import { MessageEmbed, Util } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
-        super(client, "steal", {
+        super(client, "stealemoji", {
             description: "Steal an emoji from other servers.",
             aliases: ["steale"],
             category: "Moderation",
