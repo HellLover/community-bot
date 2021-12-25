@@ -1,7 +1,7 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { Message, MessageEmbed } from "discord.js";
-import { embedRequestedBy } from "../../utils/constants";
+import { Message, MessageEmbed, MessageActionRow, MessageButton, Guild } from "discord.js";
+import { embedRequestedBy, errorEmbed } from "../../utils/constants";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -13,7 +13,15 @@ export default class extends Command {
     }
 
     async execute(client: Client, message: Message, args: any[]) {
+
+    try {
+
         const { guild } = message;
+
+        let buttonRaw = new MessageActionRow().addComponents([
+            new MessageButton().setCustomId("roles").setStyle("DANGER").setLabel("Roles").setEmoji("🎨"),
+            new MessageButton().setCustomId("server").setStyle("PRIMARY").setLabel("Server Info").setEmoji("ℹ️"),
+        ]);
 
         const memberCount = guild?.memberCount;
         const name = guild?.name;
@@ -38,14 +46,47 @@ export default class extends Command {
             { name: "[Member Count]", value: `${memberCount}`, inline: true },
             { name: "[Boosts]", value: `Count: ${boosts.count}, Tier: ${boosts.tier}`, inline: true },
             { name: "[Verification Level]", value: `${verificationLevel}`, inline: true },
-            { name: "[Roles Size]", value: `${roleSize} (Run \`roles\` to check them all.)`, inline: true },
+            { name: "[Roles Size]", value: `${roleSize}`, inline: true },
             { name: "[Channels Size]", value: `${channelSize}`, inline: true },
-            { name: "[Emojis Size]", value: `${emojiSize} (Run \`emojis\` to check them all.)`, inline: true },
+            { name: "[Emojis Size]", value: `${emojiSize}`, inline: true },
             { name: "[Creation Date]", value: `${creationDate}`, inline: true }
         ])
         .setThumbnail(`${iconURL}`)
         .setFooter(`${embedRequestedBy(message.author).text}`, embedRequestedBy(message.author).icon_url)
-        return message.reply({ embeds: [GuildEmbed] })
+
+        const Roles = new MessageEmbed()
+        .setTitle(`Server's Roles (${guild?.roles.cache.size})`)
+        .setDescription(guild?.roles.cache.filter((r) => r.id !== guild?.id).map((r) => `\`${r.name}\``).join(", ")! || "Nothing")
+        .setColor("YELLOW");
+
+        let msg = await message.reply({ embeds: [GuildEmbed], components: [buttonRaw] });
+
+        let collector = await msg.createMessageComponentCollector({ filter: i => i.user.id === message.author.id, time: 60000 });
+
+        collector.on("collect", async (i) => {
+            if(!i.isButton()) return;
+
+            switch(i.customId) {
+                case "roles":
+                    await i.deferUpdate();
+                    msg.edit({ embeds: [Roles] });
+                    break;
+                case "server": 
+                    await i.deferUpdate();
+                    msg.edit({ embeds: [GuildEmbed] });
+                    break;
+            }
+        });
+
+        collector.on("end", () => {
+            if(!msg.deleted) {
+                msg.edit({ embeds: [GuildEmbed], components: [] })
+            }
+        })
+
+       } catch(e) {
+          return message.channel.send({ embeds: [errorEmbed(e)] });
+       } 
 
     }
 }
