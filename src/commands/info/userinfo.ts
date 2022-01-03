@@ -29,18 +29,24 @@ export default class extends Command {
         if(!member) return message.reply({ content: "Please, provide a mention/tag/id for this command."})
 
         const embed = new MessageEmbed()
-        .setColor("BLUE")
-        .setAuthor(`Information about ${member.displayName}`, member.user.displayAvatarURL({ format: "png", dynamic: true }))
+        .setColor("#2f3136")
+        .setAuthor({
+            name: `Information about ${member.displayName}`,
+            iconURL: member.user.displayAvatarURL({ format: "png", dynamic: true })
+        })
         .addFields([
             { name: "User", value: `${member.user.tag}` },
             { name: "Created at", value: `<t:${Math.round(member.user.createdTimestamp / 1000)}>` },
             { name: "Joined the guild at", value: `<t:${Math.round(member.joinedTimestamp! / 1000)}>` },
-            { name: "Status", value: `${statusMap[member.presence?.status!]}` },
+            { name: "Status", value: `${statusMap[member.presence?.status! || "offline"]}` },
             { name: "Activities", value: `${member.presence?.activities.length ? member.presence?.activities.map((p) => `- ${p.type.toUpperCase()}: ${p.name}`).join("\n") : "Nothing"}` },
-            { name: "Device(s)", value: `${deviceMap[Object.keys(member.presence?.clientStatus!)[0]]}` }
+            { name: "Device(s)", value: `${member.presence?.clientStatus ? deviceMap[Object.keys(member.presence?.clientStatus!)[0]] : "None"}` }
         ])
         .setThumbnail(member.user.displayAvatarURL({ format: "png", dynamic: true, size: 2048 }))
-        .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL({ format: "png", dynamic: true }))
+        .setFooter({
+            text: `Requested by ${message.author.tag}`,
+            iconURL: message.author.displayAvatarURL({ format: "png", dynamic: true })
+        })
         .setTimestamp()
 
         return message.reply({ embeds: [embed] })

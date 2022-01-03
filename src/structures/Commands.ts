@@ -6,6 +6,7 @@ interface CommandOptions {
     usage?: string;
     aliases?: any[];
     category?: string;
+    examples?: string[];
     memberPermission?: any[];
     botPermission?: any[];
     cooldown?: number;
@@ -19,6 +20,7 @@ export default class Command {
     usage: string | null;
     aliases: any[];
     category: string | null;
+    examples?: string[];
     memberPermission: any[];
     botPermission: any[];
     cooldown: number| null;
@@ -31,6 +33,7 @@ export default class Command {
         this.usage = options.usage || null;
         this.aliases = options.aliases || [];
         this.category = options.category || null;
+        this.examples = options.examples || [];
         this.memberPermission = options.memberPermission || [];
         this.botPermission = options.botPermission || [];
         this.cooldown = options.cooldown || null;

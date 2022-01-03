@@ -25,7 +25,9 @@ export default class extends Command {
             await message.guild.emojis.create(emoji, name ? name : `emoji_${message.guild.emojis.cache.size + 1}`);
 
             const embed = new MessageEmbed()
-            .setAuthor("Success!")
+            .setAuthor({
+              name: "Success!"
+            })
             .setDescription(`Successfully added the emoji.`)
             .setColor("YELLOW")
             return message.reply({ embeds: [embed] })
@@ -39,7 +41,9 @@ export default class extends Command {
             await message.guild.emojis.create(link, name ? name : `emoji_${message.guild.emojis.cache.size + 1}`);
 
             const embed = new MessageEmbed()
-            .setAuthor("Success!")
+            .setAuthor({
+              name: "Success!"
+            })
             .setDescription(`Successfully added the emoji.`)
             .setColor("YELLOW")
             return message.reply({ embeds: [embed] })
@@ -57,7 +61,7 @@ export default class extends Command {
         });
 
       } catch(e) {
-          return message.reply({ content: `\`\`\`js\n${e}\n\`\`\`` })
+        return message.channel.send({ embeds: [this.client.utils.errorEmbed(e)] });
       }
 
     }

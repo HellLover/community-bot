@@ -53,6 +53,10 @@ export default class extends Event {
             return message.reply({ content: `You're missing the following permission(s) to execute the command — **${this.client.utils.missingPerms}**` });
         }
 
+        if (command.botPermission.length && !message.guild.me?.permissions.has(command.botPermission)) {
+            return message.reply({ content: `I'm missing the following permission(s) to execute the command — **${this.client.utils.missingPerms}**` });
+        }
+
         try {
            command.execute(client, message, args)
         } catch(e) {

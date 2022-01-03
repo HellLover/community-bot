@@ -1,7 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
 import { Message, MessageEmbed, MessageActionRow, MessageButton, Guild } from "discord.js";
-import { embedRequestedBy, errorEmbed } from "../../utils/constants";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -18,11 +17,6 @@ export default class extends Command {
 
         const { guild } = message;
 
-        let buttonRaw = new MessageActionRow().addComponents([
-            new MessageButton().setCustomId("roles").setStyle("DANGER").setLabel("Roles").setEmoji("🎨"),
-            new MessageButton().setCustomId("server").setStyle("PRIMARY").setLabel("Server Info").setEmoji("ℹ️"),
-        ]);
-
         const memberCount = guild?.memberCount;
         const name = guild?.name;
         const owner = await guild?.fetchOwner().then((u) => { return u.user.tag });
@@ -38,8 +32,11 @@ export default class extends Command {
         const iconURL = guild?.iconURL({ size: 2048, format: "png" });
 
         const GuildEmbed = new MessageEmbed()
-        .setAuthor(`Information about this server [${name}]`, `${iconURL}`)
-        .setColor("BLUE")
+        .setAuthor({
+            name: `Information about the server [${name}]`,
+            iconURL: `${iconURL}`
+        })
+        .setColor("#2f3136")
         .setDescription("The main support server for <@713713873915478036> (Dolphin#4366)")
         .addFields([
             { name: "[Owner]", value: `${owner}`, inline: true },
@@ -52,40 +49,15 @@ export default class extends Command {
             { name: "[Creation Date]", value: `${creationDate}`, inline: true }
         ])
         .setThumbnail(`${iconURL}`)
-        .setFooter(`${embedRequestedBy(message.author).text}`, embedRequestedBy(message.author).icon_url)
-
-        const Roles = new MessageEmbed()
-        .setTitle(`Server's Roles (${guild?.roles.cache.size})`)
-        .setDescription(guild?.roles.cache.filter((r) => r.id !== guild?.id).map((r) => `\`${r.name}\``).join(", ")! || "Nothing")
-        .setColor("YELLOW");
-
-        let msg = await message.reply({ embeds: [GuildEmbed], components: [buttonRaw] });
-
-        let collector = await msg.createMessageComponentCollector({ filter: i => i.user.id === message.author.id, time: 60000 });
-
-        collector.on("collect", async (i) => {
-            if(!i.isButton()) return;
-
-            switch(i.customId) {
-                case "roles":
-                    await i.deferUpdate();
-                    msg.edit({ embeds: [Roles] });
-                    break;
-                case "server": 
-                    await i.deferUpdate();
-                    msg.edit({ embeds: [GuildEmbed] });
-                    break;
-            }
-        });
-
-        collector.on("end", () => {
-            if(!msg.deleted) {
-                msg.edit({ embeds: [GuildEmbed], components: [] })
-            }
+        .setFooter({
+            text: `${this.client.utils.embedRequestedBy(message.author).text}`,
+            iconURL: this.client.utils.embedRequestedBy(message.author).icon_url
         })
 
+        return message.reply({ embeds: [GuildEmbed] });
+
        } catch(e) {
-          return message.channel.send({ embeds: [errorEmbed(e)] });
+          return message.channel.send({ embeds: [this.client.utils.errorEmbed(e)] });
        } 
 
     }

@@ -7,6 +7,7 @@ import { Database } from '../database/Database';
 import { CacheStorage } from '../database/CacheStorage';
 import { Logger } from '../utils/Logger';
 import { config } from "../config";
+import * as customEmojis from "../jsons/emojis.json"
 
 export class Client extends DJS.Client {
     database: Database;
@@ -18,6 +19,7 @@ export class Client extends DJS.Client {
     config: typeof config;
     utils: ClientUtils;
     logger: Logger;
+    customEmojis: typeof customEmojis;
 
     constructor(options: DJS.ClientOptions) {
         super(options);
@@ -31,6 +33,7 @@ export class Client extends DJS.Client {
         this.database = new Database(this);
         this.cache = new CacheStorage();
         this.logger = new Logger(null);
+        this.customEmojis = customEmojis;
 
     }
 

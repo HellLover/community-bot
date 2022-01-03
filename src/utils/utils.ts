@@ -134,4 +134,19 @@ export default class ClientUtils {
         )
       }
 
+      embedRequestedBy = (author: DJS.User) => {
+        return {
+            text: `Requested by ${author?.tag}`,
+            icon_url: `${author.displayAvatarURL({ format: "png", dynamic: true })}`
+        }
+      };
+    
+      errorEmbed = (errorMessage: any): DJS.MessageEmbed => {
+        return new DJS.MessageEmbed()
+            .setColor("#2f3136")
+            .setTitle("An error occured!")
+            .setDescription(`\`\`\`js\n${errorMessage}\n\`\`\``)
+            .setTimestamp();
+      }
+
    }

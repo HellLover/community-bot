@@ -3,6 +3,7 @@
       "target": "ESNEXT",
       "module": "commonjs",
       "moduleResolution": "node",
+      "resolveJsonModule": true,
       "strict": true,
       "esModuleInterop": true,
       "strictPropertyInitialization": false,
