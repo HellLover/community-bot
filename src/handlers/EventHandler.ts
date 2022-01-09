@@ -8,7 +8,13 @@ const EventHandler = (client) => {
             const File = require(eventFile).default;
             const event = new File(client, name.toLowerCase());
             client.events.set(event.name, event);
-            event.once === true ? client.once(name, (...args) => event.execute(client, ...args)) : client.on(name, (...args) => event.execute(client, ...args))
+            if(eventFile.includes("player")) {
+                client.player.on(name, (...args) => event.execute(...args))
+            } else if(event.once) {
+                client.once(name, (...args) => event.execute(client, ...args))
+            } else {
+                client.on(name, (...args) => event.execute(client, ...args))
+            }
         }
         client.logger.log(`[EVENTS] Loaded ${client.events.size} events!`)
     }

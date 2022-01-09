@@ -141,12 +141,14 @@ export default class ClientUtils {
         }
       };
     
-      errorEmbed = (errorMessage: any): DJS.MessageEmbed => {
+      errorEmbed = (error): DJS.MessageEmbed => {
         return new DJS.MessageEmbed()
             .setColor("#2f3136")
             .setTitle("An error occured!")
-            .setDescription(`\`\`\`js\n${errorMessage}\n\`\`\``)
-            .setTimestamp();
+            .addFields([
+              { name: "Message", value: `\`\`\`js\n${error.message}\n\`\`\`` },
+              { name: "Stack", value: `\`\`\`js\n${error.stack}\n\`\`\`` }
+            ])
       }
 
    }

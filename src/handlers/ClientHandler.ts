@@ -1,4 +1,5 @@
 import * as DJS from 'discord.js';
+import { Player } from "discord-player";
 
 import CommandHandler from "../handlers/CommandHandler";
 import EventHandler from "../handlers/EventHandler";
@@ -19,6 +20,7 @@ export class Client extends DJS.Client {
     config: typeof config;
     utils: ClientUtils;
     logger: Logger;
+    player: Player;
     customEmojis: typeof customEmojis;
 
     constructor(options: DJS.ClientOptions) {
@@ -34,6 +36,12 @@ export class Client extends DJS.Client {
         this.cache = new CacheStorage();
         this.logger = new Logger(null);
         this.customEmojis = customEmojis;
+        this.player = new Player(this, {
+            ytdlOptions: {
+                quality: 'highestaudio',
+                highWaterMark: 1 << 25
+            }
+        })
 
     }
 

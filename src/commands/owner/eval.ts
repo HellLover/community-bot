@@ -32,7 +32,7 @@ export default class extends Command {
 
 }
 
-    clean(text: string) {
+    clean(text: any) {
         if (typeof text !== "string") text = utils.inspect(text, { depth: 0 });
   
         text = text

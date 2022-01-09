@@ -41,7 +41,7 @@ export default class extends Event {
                 const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
                 if (now < expirationTime) {
                     const timeLeft = (expirationTime - now) / 1000;
-                    return message.reply({ content: `Calm down dude! You're in cooldown. Wait more ${timeLeft} second(s) to execute the command again.` });
+                    return message.reply({ content: `Calm down dude! You're in cooldown. Wait more ${timeLeft.toFixed(1)} second(s) to execute the command again.` });
                 }
             }
       
@@ -60,7 +60,7 @@ export default class extends Event {
         try {
            command.execute(client, message, args)
         } catch(e) {
-            this.client.logger.error(e)
+            (this.client.channels.cache.get("716419256618582018") as DJS.TextChannel).send({ embeds: [this.client.utils.errorEmbed(e)] })
         }
     }
     

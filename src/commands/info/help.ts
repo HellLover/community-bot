@@ -30,10 +30,11 @@ export default class extends Command {
             .setColor("#2f3136")
             .setDescription(`**Tip:** Use \`${prefix}help <command>\` to get additional information about the command.`)
             .addFields([
-                { name: `Informative Commands`, value: `${commands.filter((c) => c.category === "Information").map((c) => `\`${c.name}\``).join(" | ")}` },
-                { name: `General Commands`, value: `${commands.filter((c) => c.category === "General").map((c) => `\`${c.name}\``).join(" | ")}` },
-                { name: `Moderation Commands`, value: `${commands.filter((c) => c.category === "Moderation").map((c) => `\`${c.name}\``).join(" | ")}` },
-                { name: `Config Commands`, value: `${commands.filter((c) => c.category === "Config").map((c) => `\`${c.name}\``).join(" | ")}` },
+                { name: `Informative`, value: `${commands.filter((c) => c.category === "Information").map((c) => `\`${c.name}\``).join(" | ")}` },
+                { name: `General`, value: `${commands.filter((c) => c.category === "General").map((c) => `\`${c.name}\``).join(" | ")}` },
+                { name: `Music (In development)`, value: `${commands.filter((c) => c.category === "Music").map((c) => `\`${c.name}\``).join(" | ")}` },
+                { name: `Moderation`, value: `${commands.filter((c) => c.category === "Moderation").map((c) => `\`${c.name}\``).join(" | ")}` },
+                { name: `Config`, value: `${commands.filter((c) => c.category === "Config").map((c) => `\`${c.name}\``).join(" | ")}` }
             ])
             .setTimestamp()
             .setFooter({
