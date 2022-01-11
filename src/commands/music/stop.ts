@@ -12,14 +12,15 @@ export default class extends Command {
     }
 
     async execute(client: Client, message: Message, args: string[]) {
-        const queue = this.client.player.getQueue(message.guild!.id);
+        // const queue = this.client.player.getQueue(message.guild!.id);
 
-        if(!queue || !queue.playing) return message.reply({ content: "There's nothing playing right now to stop." });
+        // if(!queue || !queue.playing) return message.reply({ content: "There's nothing playing right now to stop." });
+        // if(message.guild?.me?.voice.channel && message.member?.voice.channelId !== message.guild.me.voice.channelId) return message.reply({ content: "I'm playing a music on another channel." })
 
-        if(queue) {
-            queue.connection.disconnect();
-            return message.reply({ content: `${this.client.customEmojis.success} | Successfully stopped the player.` });
-        }
+        // if(queue) {
+        //     queue.stop();
+        //     return message.reply({ content: `${this.client.customEmojis.success} | Successfully stopped the player.` });
+        // }
 
     }
 }
