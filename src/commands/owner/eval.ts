@@ -1,11 +1,12 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
 import utils from "util";
+import { Message } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
         super(client, "eval", {
-            description: "Evaluate a TypeScript code.",
+            description: "Evaluate a JavaScript code.",
             aliases: ["ev"],
             category: "OwnerOnly",
             cooldown: 3,
@@ -13,18 +14,22 @@ export default class extends Command {
         })
     }
 
-    async execute(client, message, args) {
+    async execute(message: Message, args: any[]) {
 
-     try {
-         
         let code = args.join(" ");
 
-        const result = this.clean(eval(code));
+        const flags = this.client.utils.commandFlags(code);
+        const awaiter = flags.find((x) => "await" in x);
+        if (awaiter) code = code.replace("--await", "").trim();
+
+     try {
+
+        const result = this.clean(awaiter ? await eval(code) : eval(code));
         return message.reply({ content: `\`\`\`js\n${result}\n\`\`\`` })
 
      } catch(e) {
        return message.channel.send({ content: `An error occured:\n \`\`\`js\n${e}\n\`\`\`` })
-    }
+     }
 
     function doReply(object: Object | undefined) {
         return message.channel.send({ content: `\`\`\`javascript\n${require('util').inspect(object, { depth: 0 })}\n\`\`\`` });

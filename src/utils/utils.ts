@@ -151,4 +151,14 @@ export default class ClientUtils {
             ])
       }
 
+      commandFlags(args) {
+        if (!Array.isArray(args)) args = args.split(" ");
+        const regex = /--([\wа-я]+)(\s([\wа-я]+))?/gi;
+ 
+        return (args.join(" ").match(regex) ?? []).map((element) => {
+           const [tag, val] = element.slice(2).split(" ");
+           return { [tag]: val ?? null };
+        });
+     }
+
    }

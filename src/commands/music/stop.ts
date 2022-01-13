@@ -11,7 +11,7 @@ export default class extends Command {
         })
     }
 
-    async execute(client: Client, message: Message, args: string[]) {
+    async execute(message: Message, args: string[]) {
         // const queue = this.client.player.getQueue(message.guild!.id);
 
         // if(!queue || !queue.playing) return message.reply({ content: "There's nothing playing right now to stop." });

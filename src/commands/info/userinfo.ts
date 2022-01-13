@@ -11,7 +11,7 @@ export default class extends Command {
         })
     }
 
-    async execute(client: Client, message: Message, args: any[]) {
+    async execute(message: Message, args: any[]) {
         const statusMap = {
             online: "<:online:719630983648772198> Online",
             idle: "<:idle:719630983782989935> Idle",

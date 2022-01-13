@@ -18,7 +18,7 @@ export default class extends Command {
         })
     }
 
-    async execute(client: Client, message: Message, args: string[]) {
+    async execute(message: Message, args: string[]) {
         if(!args[0]) return message.reply({ content: "Please, provide a song url/name to play." });
 
         if(!message.member?.voice.channel) return message.reply({ content: "You must be connected to a voice channel in order to play a music." });

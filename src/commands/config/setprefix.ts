@@ -11,7 +11,7 @@ export default class extends Command {
         })
     }
 
-    async execute(client, message, args) {
+    async execute(message, args) {
 
       try {
         const prefix = args.join(" ");

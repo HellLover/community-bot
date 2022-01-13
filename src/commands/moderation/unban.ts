@@ -13,7 +13,7 @@ export default class extends Command {
         })
     }
 
-    async execute(client: Client, message: Message, args: string[]) {
+    async execute(message: Message, args: string[]) {
 
      try {
 

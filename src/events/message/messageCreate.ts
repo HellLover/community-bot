@@ -7,7 +7,7 @@ export default class extends Event {
         super(client, "messageCreate");
     }
 
-    async execute(client: Client, message: DJS.Message<true>) {
+    async execute(message: DJS.Message<true>) {
         if (message.author.bot || !message.guild) return;
 
         const GuildData = await this.client.utils.getGuildInDB(message.guild?.id)
@@ -18,16 +18,16 @@ export default class extends Event {
 
         let args = message.content.slice(prefix.length).trim().split(/ +/g);
         let cmd = args?.shift()?.toLowerCase();
-        const command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
+        const command = this.client.commands.get(cmd) || this.client.commands.get(this.client.aliases.get(cmd));
 
         if(!command) return;
 
-        if (command.ownerOnly && message.author.id !== client.config.ownerID) {
+        if (command.ownerOnly && message.author.id !== this.client.config.ownerID) {
             return;
         }
 
         if (command.cooldown) {
-            const { cooldowns } = client;
+            const { cooldowns } = this.client;
       
             if (!cooldowns.has(command.name)) {
                 cooldowns.set(command.name, new Map());
@@ -58,7 +58,7 @@ export default class extends Event {
         }
 
         try {
-           command.execute(client, message, args)
+           command.execute(message, args)
         } catch(e) {
             (this.client.channels.cache.get("716419256618582018") as DJS.TextChannel).send({ embeds: [this.client.utils.errorEmbed(e)] })
         }

@@ -13,10 +13,10 @@ export default class extends Command {
         })
     }
 
-    async execute(client: Client, message: Message, args: string[]) {
+    async execute(message: Message, args: string[]) {
 
      try {
-        const commands = client.commands;
+        const commands = this.client.commands;
         const cmd = args[0]
 
         const prefix = (await this.client.utils.getGuildInDB(message.guild!.id)).prefix;

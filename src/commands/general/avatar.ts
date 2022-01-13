@@ -11,7 +11,7 @@ export default class extends Command {
         })
     }
 
-    async execute(client, message, args) {
+    async execute(message, args) {
         const member = await this.client.utils.findMember(message, args, { allowAuthor: true });
 
         const avatar = member?.user?.displayAvatarURL({ dynamic: true, format: "png", size: 2048 });

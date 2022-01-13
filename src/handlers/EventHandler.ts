@@ -11,9 +11,9 @@ const EventHandler = (client) => {
             if(eventFile.includes("player")) {
                 client.player.on(name, (...args) => event.execute(...args))
             } else if(event.once) {
-                client.once(name, (...args) => event.execute(client, ...args))
+                client.once(name, (...args) => event.execute(...args))
             } else {
-                client.on(name, (...args) => event.execute(client, ...args))
+                client.on(name, (...args) => event.execute(...args))
             }
         }
         client.logger.log(`[EVENTS] Loaded ${client.events.size} events!`)

@@ -11,7 +11,7 @@ export default class extends Command {
         })
     }
 
-    async execute(client: Client, message: Message, args: string[]) {
+    async execute(message: Message, args: string[]) {
         const queue = this.client.player.getQueue(message.guild!.id);
 
         if(message.guild?.me?.voice.channel && message.member?.voice.channelId !== message.guild.me.voice.channelId) return message.reply({ content: "You cannot disconnect me from the voice as I'm playing music on another channel." })

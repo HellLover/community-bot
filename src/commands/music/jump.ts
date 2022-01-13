@@ -11,7 +11,7 @@ export default class extends Command {
         })
     }
 
-    async execute(client: Client, message: Message, args: any[]) {
+    async execute(message: Message, args: any[]) {
 
       try {
         const queue = this.client.player.getQueue(message.guild!.id);
