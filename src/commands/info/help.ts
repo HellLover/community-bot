@@ -60,6 +60,10 @@ export default class extends Command {
                 }
             });
 
+            collector.on("end", () => {
+                msg.edit({ embeds: [embed], components: [] })
+            })
+
         } else {
             const command = this.client.commands.get(cmd) || this.client.events.get(cmd);
             if(!command) return message.reply({ content: `The command \`${cmd}\` doesn't exist.` });

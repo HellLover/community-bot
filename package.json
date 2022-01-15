@@ -4,7 +4,7 @@
   "description": "An example bot written in TypeScript & discord.js@13.3.1",
   "main": "./src/main.ts",
   "scripts": {
-    "bot": "npx ts-node ."
+    "bot": "npx ts-node-dev ."
   },
   "engines": {
     "node": "16.x"
@@ -35,6 +35,7 @@
     "dotenv": "^10.0.0",
     "events": "^3.3.0",
     "glob": "^7.2.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mongoose": "^5.12.12",
     "ms": "^2.1.3",

@@ -1,7 +1,7 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
 import utils from "util";
-import { Message } from "discord.js";
+import { Message, Util } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {

@@ -1,6 +1,7 @@
 import { Client } from "../handlers/ClientHandler";
 import { GuildModel } from "../database/models/export";
 import * as DJS from "discord.js";
+import { EmbedPaginateOptions } from "../interfaces/Interfaces";
 
 export default class ClientUtils {
     client: Client
@@ -161,4 +162,51 @@ export default class ClientUtils {
         });
      }
 
-   }
+     async paginateEmbed(message: DJS.Message, options: EmbedPaginateOptions) {
+      if (!options.timeout) options.timeout = 60000;
+      if (!options.backEmoji) options.backEmoji = "⬅";
+      if (!options.stopEmoji) options.stopEmoji = "🛑";
+      if (!options.forwardEmoji) options.forwardEmoji = "➡";
+      if (!options.filter) options.filter = () => true;
+
+      let ButtonRow = new DJS.MessageActionRow().addComponents([
+        new DJS.MessageButton().setEmoji(options.backEmoji).setCustomId("back").setStyle("SUCCESS"),
+        new DJS.MessageButton().setEmoji(options.stopEmoji).setCustomId("stop").setStyle("DANGER"),
+        new DJS.MessageButton().setEmoji(options.forwardEmoji).setCustomId("forward").setStyle("SUCCESS")
+      ]);
+ 
+      let currentPage = 0;
+      const cpm = await options.channel.send({ embeds: [options.pages[currentPage].setFooter({ text: `Page ${currentPage + 1} / ${options.pages.length}` })], components: [ButtonRow] });   
+      const collector = cpm.createMessageComponentCollector({ time: options.timeout });
+  
+      collector.on("collect", async (i) => {
+        if(!i.isButton()) return;
+        if(i.user.id !== message.author?.id) i.reply({ content: "You cannot use the buttons.", ephemeral: true })
+
+        switch(i.customId) {
+          case "back":
+            await i.deferUpdate();
+            currentPage = currentPage > 0 ? --currentPage : options.pages.length - 1;
+            break;
+          case "stop":
+            await i.deferUpdate();
+            cpm.delete().catch(() => {});
+            break;
+          case "forward":
+            await i.deferUpdate();
+            currentPage = currentPage + 1 < options.pages.length ? ++currentPage : 0;
+            break;
+        }
+
+        cpm.edit({ embeds: [options.pages[currentPage].setFooter({ text: `Page ${currentPage + 1} / ${options.pages.length}` })] }).catch(() => {});
+      })
+  
+      collector.on("end", () => {
+        ButtonRow.components.forEach((c) => c.setDisabled(true))
+        cpm.edit({ embeds: [options.pages[currentPage].setFooter({ text: `Page ${currentPage + 1} / ${options.pages.length}` })], components: [ButtonRow] }).catch(() => {})
+      });
+  
+      return cpm;
+  }
+
+}
