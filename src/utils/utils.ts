@@ -1,7 +1,7 @@
 import { Client } from "../handlers/ClientHandler";
 import { GuildModel } from "../database/models/export";
 import * as DJS from "discord.js";
-import { EmbedPaginateOptions } from "../interfaces/Interfaces";
+import { EmbedPaginateOptions } from "../Interfaces";
 
 export default class ClientUtils {
     client: Client

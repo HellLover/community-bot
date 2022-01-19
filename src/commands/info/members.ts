@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { GuildMember, Message, MessageEmbed, TextChannel, User } from "discord.js";
+import { GuildMember, Message, MessageEmbed, TextChannel } from "discord.js";
 import { chunk } from "lodash";
 
 export default class extends Command {
