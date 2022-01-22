@@ -1,5 +1,4 @@
 import { Client } from "../handlers/ClientHandler";
-import { GuildModel } from "../database/models/export";
 import * as DJS from "discord.js";
 import { EmbedPaginateOptions } from "../Interfaces";
 
@@ -10,60 +9,6 @@ export default class ClientUtils {
         this.client = client;
     }
 
-    // Database functions
-    async getGuildInDB(guildId: string) {
-        if(!guildId) console.warn("[Function: getGuildInDB]: Missing the guild ID.");
-    
-        try {
-          let guild = await this.client.database.models.get("Guild")?.findOne({ id: guildId });
-      
-          if (!guild) {
-            guild = await this.addGuild(guildId);
-          }
-      
-          return guild;
-        } catch (e) {
-          console.error(e);
-        }
-    }
-
-    async addGuild(guildId: string) {
-        if(!guildId) console.warn("[Function: addGuild]: Missing the guild ID.");
-    
-        try {
-          const guild = new GuildModel.collection({ id: guildId });
-      
-          await guild.save();
-      
-          return guild;
-        } catch (e) {
-          console.error(e);
-        }
-    }
-
-    async updateGuildInDB(guildId: string, settings: object) {
-        if(!guildId) console.warn("[Function: updateGuildInDB]: Missing the guild ID.");
-        if(!settings) console.warn("[Function: updateGuildInDB]: Missing the settings option.");
-        
-        try {
-          if (typeof settings !== "object") {
-            throw Error("'settings' must be an object");
-          }
-      
-          // check if guild exists
-          const guild = await this.getGuildInDB(guildId);
-      
-          if (!guild) {
-            await this.addGuild(guildId);
-          }
-      
-          await this.client.database.models.get("Guild")?.findOneAndUpdate({ id: guildId }, settings);
-        } catch (e) {
-          console.error(e);
-        }
-    }
-
-    // Other functions
     missingPerms(member, perms) {
         const missingPerms = member.permissions.missing(perms)
         .map(str => `\`${str.replace(/_/g, ' ').toLowerCase().replace(/\b(\w)/g, char => char.toUpperCase())}\``);

@@ -8,9 +8,13 @@ const GuildModel = new Schema({
     },
     prefix: {
         type: SchemaTypes.String,
-        required: false,
-        default: config.prefix
-    }
+        default: config.prefix,
+        required: false
+    },
+    custom_commands: { 
+        type: SchemaTypes.Array,
+        default: []
+    },
 })
 
 const Model = {

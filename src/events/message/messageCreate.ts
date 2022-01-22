@@ -10,7 +10,7 @@ export default class extends Event {
     async execute(message: DJS.Message<true>) {
         if (message.author.bot || !message.guild) return;
 
-        const GuildData = await this.client.utils.getGuildInDB(message.guild?.id)
+        const GuildData = await this.client.database.getGuild(message.guild?.id)
 
         let prefix = GuildData.prefix;
   

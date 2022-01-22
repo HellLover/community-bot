@@ -18,7 +18,7 @@ export default class extends Command {
         if(!prefix) return message.reply({ content: `Provide an argument to change the prefix for this server.` });
         if(prefix.length > 5) return message.reply({ content: "❌ The prefix must be less than or equal to 5" });
 
-        await this.client.utils.updateGuildInDB(message.guild?.id, {
+        await this.client.database.updateGuild(message.guild?.id, {
           prefix
         })
 
