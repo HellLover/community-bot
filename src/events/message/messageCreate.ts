@@ -13,12 +13,18 @@ export default class extends Event {
         const GuildData = await this.client.database.getGuild(message.guild?.id)
 
         let prefix = GuildData.prefix;
+        let customCmds = GuildData.custom_commands;
   
         if (!message.content.startsWith(prefix)) return;
 
         let args = message.content.slice(prefix.length).trim().split(/ +/g);
         let cmd = args?.shift()?.toLowerCase();
         const command = this.client.commands.get(cmd) || this.client.commands.get(this.client.aliases.get(cmd));
+        
+        if (customCmds) {
+          const customCmd = customCmds.find((x) => x.name === cmd);
+          if (customCmd) message.channel.send({ content: `${customCmd.response}` });
+        }
 
         if(!command) return;
 
