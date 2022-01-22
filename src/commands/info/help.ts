@@ -19,7 +19,7 @@ export default class extends Command {
         const commands = this.client.commands;
         const cmd = args[0]
 
-        const prefix = (await this.client.utils.getGuildInDB(message.guild!.id)).prefix;
+        const prefix = (await this.client.database.getGuild(message.guild!.id)).prefix;
 
         if(!cmd) {
             const embed = new MessageEmbed()
