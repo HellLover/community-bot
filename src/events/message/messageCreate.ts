@@ -18,13 +18,10 @@ export default class extends Event {
 
         let prefix = GuildData.prefix;
         let customCmds = GuildData.custom_commands;
-<<<<<<< Updated upstream
-=======
 
         if(message.content.match(new RegExp(`^<@!?${this.client?.user?.id}>( |)$`))){
             return message.reply({ embeds: [{ color: "#2f3136", description: `My prefix for this server is \`${prefix}\`!` }] })
         }
->>>>>>> Stashed changes
   
         if (!message.content.startsWith(prefix)) return;
 
@@ -35,11 +32,6 @@ export default class extends Event {
         if (customCmds) {
           const customCmd = customCmds.find((x) => x.name === cmd);
           if (customCmd) message.channel.send({ content: `${customCmd.response}` });
-        }
-
-        if (customCmds) {
-            const customCmd = customCmds.find((x) => x.name === cmd);
-            if (customCmd) message.reply({ content: customCmd.response });
         }
 
         if(!command) return;
