@@ -37,7 +37,7 @@ export default class extends Command {
             DISCORD_PARTNER: '<:partner:722892221644537867>',
             SYSTEM: '<:Clyde:761313285194121216>',
             TEAM_USER: '<:dolphin_nitro:814097359423930378>',
-            VERIFIED_DEVELOPER: '<a:dolphin_verifiedDev:814097359712550942>',
+            EARLY_VERIFIED_BOT_DEVELOPER: '<a:dolphin_verifiedDev:814097359712550942>',
             DISCORD_CERTIFIED_MODERATOR: '<:certifiedMod:851520583107477525>',
             VERIFIED_BOT: '<:verifiedbot:722892416058654780>'
         }
@@ -61,18 +61,24 @@ export default class extends Command {
         })
         .addFields([
             { name: "User", value: `${member.user.tag} ${badges}` },
-            { name: "Created at", value: `<t:${Math.round(member.user.createdTimestamp / 1000)}>` },
-            { name: "Joined the guild at", value: `<t:${Math.round(member.joinedTimestamp! / 1000)}>` },
-            { name: "Status", value: `${statusMap[member.presence?.status! || "offline"]}` },
-            { name: "Activities", value: `${member.presence?.activities.length ? member.presence?.activities.map((p) => `- ${p.type.toUpperCase()}: ${p.name}`).join("\n") : "Nothing"}` },
-            { name: "Device(s)", value: `${member.presence?.clientStatus ? deviceMap[Object.keys(member.presence?.clientStatus!)[0]] : "None"}` }
+            { name: "ID", value: `${member.user.id}` },
+            { name: "Account Created", value: `<t:${Math.round(member.user.createdTimestamp / 1000)}:R>\n(<t:${Math.round(member.user.createdTimestamp / 1000)}>)`, inline: true },
+            { name: "Joined The Guild", value: `<t:${Math.round(member.joinedTimestamp! / 1000)}:R>\n(<t:${Math.round(member.joinedTimestamp! / 1000)}>)`, inline: true },
         ])
         .setThumbnail(member.user.displayAvatarURL({ format: "png", dynamic: true, size: 2048 }))
         .setFooter({
-            text: `Requested by ${message.author.tag} | UserID: ${member.user.id}`,
+            text: `Requested by ${message.author.tag}`,
             iconURL: message.author.displayAvatarURL({ format: "png", dynamic: true })
         })
         .setTimestamp()
+
+        if(member.presence?.activities.length! > 0) {
+            embed.setDescription(`${member.presence?.activities.map((a) => a.type == 'CUSTOM' ? `↳ **Custom Status**: ${a.emoji || ""} ${a.state}` : `↳ **${a.type.toLowerCase()}**: [${a.name}](${a.url})`).join("\n")}`)
+        }
+
+        if(member.presence && member.presence?.status !== "offline") {
+            embed.addField("Status", `${statusMap[member.presence?.status!]} (${deviceMap[Object.keys(member.presence?.clientStatus!)[0]]})`)
+        }
 
         return message.reply({ embeds: [embed] })
     }

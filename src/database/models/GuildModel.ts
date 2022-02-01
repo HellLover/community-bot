@@ -13,7 +13,7 @@ const GuildModel = new Schema({
     },
     custom_commands: { 
         type: SchemaTypes.Array,
-        default: []
+        default: [],
     },
 })
 

@@ -1,6 +1,11 @@
 import * as envConfig from "dotenv";
 envConfig.config();
 
+import "./__structures/Guild";
+import "./__structures/Channel";
+import "./__structures/User";
+import "./__structures/Message";
+
 import { Client } from "./handlers/ClientHandler";
 
 const client = new Client({ 

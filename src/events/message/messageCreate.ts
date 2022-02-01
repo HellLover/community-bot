@@ -7,13 +7,24 @@ export default class extends Event {
         super(client, "messageCreate");
     }
 
-    async execute(message: DJS.Message<true>) {
+    async execute(message: DJS.Message) {
         if (message.author.bot || !message.guild) return;
+        if(message.channel.type === "DM") return;
+        if(!message.channel.permissionsFor(message.guild.me as DJS.GuildMember).has(["SEND_MESSAGES", "VIEW_CHANNEL"])) return;
+
+        if(message.author["blacklisted"] && message.author["isDev"]() == false) return;
 
         const GuildData = await this.client.database.getGuild(message.guild?.id)
 
         let prefix = GuildData.prefix;
         let customCmds = GuildData.custom_commands;
+<<<<<<< Updated upstream
+=======
+
+        if(message.content.match(new RegExp(`^<@!?${this.client?.user?.id}>( |)$`))){
+            return message.reply({ embeds: [{ color: "#2f3136", description: `My prefix for this server is \`${prefix}\`!` }] })
+        }
+>>>>>>> Stashed changes
   
         if (!message.content.startsWith(prefix)) return;
 
@@ -24,6 +35,11 @@ export default class extends Event {
         if (customCmds) {
           const customCmd = customCmds.find((x) => x.name === cmd);
           if (customCmd) message.channel.send({ content: `${customCmd.response}` });
+        }
+
+        if (customCmds) {
+            const customCmd = customCmds.find((x) => x.name === cmd);
+            if (customCmd) message.reply({ content: customCmd.response });
         }
 
         if(!command) return;
@@ -56,11 +72,11 @@ export default class extends Event {
         }
 
         if (command.memberPermission.length && !message.member?.permissions.has(command.memberPermission)) {
-            return message.reply({ content: `You're missing the following permission(s) to execute the command — **${this.client.utils.missingPerms}**` });
+            return message.reply({ content: `You're missing the following permission(s) to execute the command — **${this.client.utils.missingPerms(command.memberPermission)}**` });
         }
 
         if (command.botPermission.length && !message.guild.me?.permissions.has(command.botPermission)) {
-            return message.reply({ content: `I'm missing the following permission(s) to execute the command — **${this.client.utils.missingPerms}**` });
+            return message.reply({ content: `I'm missing the following permission(s) to execute the command — **${this.client.utils.missingPerms(command.botPermission)}**` });
         }
 
         try {

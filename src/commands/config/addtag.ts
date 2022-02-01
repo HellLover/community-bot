@@ -4,12 +4,13 @@ import { Message } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
-        super(client, "addcommand", {
-            description: "Add a custom command to the guild.",
-            aliases: ["addcmd"],
+        super(client, "addtag", {
+            description: "Add a tag to the guild.",
+            aliases: [],
             category: "Config",
             memberPermission: ["ADMINISTRATOR"],
-            usage: ".addcmd <name> <response>"
+            usage: ".addtag <name> <response>",
+            cooldown: 10
         })
     }
 
@@ -21,21 +22,21 @@ export default class extends Command {
         const cmdResponse = args.slice(1).join(" ");
 
         if (!cmdName) {
-            return message.channel.send({ content: `You need to provide a name for the command (\`${this.usage}\`).` });
+            return message.channel.send({ content: `You need to provide a name for the tag (\`${this.usage}\`).` });
         }
 
         if (!cmdResponse) {
-            return message.channel.send({ content: `You need to provide a response for the command (\`${this.usage}\`).` });
+            return message.channel.send({ content: `You need to provide a response for the tag (\`${this.usage}\`).` });
         }
 
         const guild = await this.client.database.getGuild(message.guild!.id);
         const commands = guild.custom_commands;
 
         if (commands && commands.find((x) => x.name === cmdName.toLowerCase()))
-          return message.channel.send({ content: "Such a command already exists in the guild commands." });
+          return message.channel["error"]("Such a tag already exists in the guild.");
 
         if (this.client.commands.has(cmdName) || this.client.aliases.has(cmdName)) {
-            return message.channel.send({ content: "Such a command already exists in the bot commands." });
+            return message.channel["error"]("Cannot create a tag which name matches one of the client's commands.");
         }
 
         const data = {
@@ -48,7 +49,7 @@ export default class extends Command {
         } else {
              await this.client.database.updateGuild(message.guild!.id, { custom_commands: [...commands, data] });
         }
-        return message.reply({ content: `Successfully created the command \`${cmdName}\`` })
+        return message.channel["success"](`Successfully created the tag \`${cmdName}\``)
 
       } catch(e) {
           return message.reply({ content: `An error occured:\n\`\`\`js\n${e}\n\`\`\`` })

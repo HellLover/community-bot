@@ -43,7 +43,7 @@ export default class extends Command {
             })
 
             let buttonRaw = new MessageActionRow().addComponents([
-                new MessageButton().setCustomId("delete").setStyle("DANGER").setEmoji("<:Error:927240559905620009>"),
+                new MessageButton().setCustomId("delete").setStyle("DANGER").setEmoji("<:Error:927240559905620009>").setLabel("Close"),
             ]);
 
             const msg = await message.channel.send({ embeds: [embed], components: [buttonRaw] });
@@ -56,12 +56,12 @@ export default class extends Command {
                 if(!i.isButton()) return;
 
                 if(i.customId === "delete") {
-                    msg.delete();
+                    msg.delete().catch(() => {});;
                 }
             });
 
             collector.on("end", () => {
-                msg.edit({ embeds: [embed], components: [] })
+                msg.edit({ embeds: [embed], components: [] }).catch(() => {});
             })
 
         } else {
@@ -82,7 +82,7 @@ export default class extends Command {
             .addFields([
                 { name: "Usage", value: `${command.usage || "No usage."}` },
                 { name: "Category", value: `${command.category || "Private"}` },
-                { name: "Member/Bot Permissions", value: `${command.memberPermission.join(", ") || "None."} / ${command.botPermission.join(", ") || "None."}` },
+                { name: "Member / Bot Permissions", value: `${command.memberPermission.length ? this.client.utils.missingPerms(command.memberPermission) : "None."} / ${command.botPermission.length ? this.client.utils.missingPerms(command.botPermission) : "None."}` },
             ])
             .setFooter({
                 text: `Requested by ${message.author.tag}`,

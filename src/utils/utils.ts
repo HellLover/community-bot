@@ -8,9 +8,9 @@ export default class ClientUtils {
     constructor(client) {
         this.client = client;
     }
-
-    missingPerms(member, perms) {
-        const missingPerms = member.permissions.missing(perms)
+    
+    missingPerms(perms: string[]) {
+        const missingPerms = perms
         .map(str => `\`${str.replace(/_/g, ' ').toLowerCase().replace(/\b(\w)/g, char => char.toUpperCase())}\``);
     
         return missingPerms.length > 1 ?
@@ -115,9 +115,9 @@ export default class ClientUtils {
       if (!options.filter) options.filter = () => true;
 
       let ButtonRow = new DJS.MessageActionRow().addComponents([
-        new DJS.MessageButton().setEmoji(options.backEmoji).setCustomId("back").setStyle("SUCCESS"),
+        new DJS.MessageButton().setEmoji(options.backEmoji).setCustomId("back").setStyle("PRIMARY"),
         new DJS.MessageButton().setEmoji(options.stopEmoji).setCustomId("stop").setStyle("DANGER"),
-        new DJS.MessageButton().setEmoji(options.forwardEmoji).setCustomId("forward").setStyle("SUCCESS")
+        new DJS.MessageButton().setEmoji(options.forwardEmoji).setCustomId("forward").setStyle("PRIMARY")
       ]);
  
       let currentPage = 0;
@@ -152,6 +152,26 @@ export default class ClientUtils {
       });
   
       return cpm;
+  }
+
+  getPrefix(message, data){
+    if(message.channel.type !== "dm"){
+      const prefixes = [
+        `<@!${message.client.user.id}> `,
+        `<@${message.client.user.id}> `,
+        message.client.user.username.toLowerCase(),
+        data.prefix
+      ];
+      let prefix = null;
+      prefixes.forEach((p) => {
+        if(message.content.startsWith(p) || message.content.toLowerCase().startsWith(p)){
+          prefix = p;
+        }
+      });
+      return prefix;
+    } else {
+      return true;
+    }
   }
 
 }

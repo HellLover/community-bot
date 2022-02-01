@@ -9,6 +9,7 @@ export default class extends Command {
             aliases: [],
             category: "Moderation",
             memberPermission: ["BAN_MEMBERS"],
+            botPermission: ["BAN_MEMBERS"],
             cooldown: 5
         })
     }

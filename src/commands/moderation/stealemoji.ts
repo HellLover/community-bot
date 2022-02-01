@@ -9,6 +9,8 @@ export default class extends Command {
             description: "Steal an emoji from other servers.",
             aliases: ["steale"],
             category: "Moderation",
+            memberPermission: ["MANAGE_GUILD"],
+            botPermission: ["MANAGE_GUILD"]
         })
     }
 

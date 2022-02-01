@@ -2,7 +2,7 @@ import { connect, connection, Connection, disconnect, Model } from "mongoose";
 import { EventEmitter } from "events";
 import { Client } from "../handlers/ClientHandler";
 import { Collection } from "discord.js";
-import { GuildModel } from "./models/export/index";
+import { GuildModel, UserModel } from "./models/export/index";
 
 export class Database extends EventEmitter {
     connection: Connection;
@@ -15,6 +15,7 @@ export class Database extends EventEmitter {
 
         // Setting up the models
         this.models.set(GuildModel.name, GuildModel.collection);
+        this.models.set(UserModel.name, UserModel.collection);
 
         this.connection = connection;
         this.connection.on("open", this.emit.bind(this, "ready"));

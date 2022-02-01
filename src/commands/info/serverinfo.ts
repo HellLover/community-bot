@@ -37,16 +37,15 @@ export default class extends Command {
             iconURL: `${iconURL}`
         })
         .setColor("#2f3136")
-        .setDescription("The main support server for <@713713873915478036> (Dolphin#4366)")
         .addFields([
-            { name: "[Owner]", value: `${owner}`, inline: true },
-            { name: "[Member Count]", value: `${memberCount}`, inline: true },
-            { name: "[Boosts]", value: `Count: ${boosts.count}, Tier: ${boosts.tier}`, inline: true },
-            { name: "[Verification Level]", value: `${verificationLevel}`, inline: true },
-            { name: "[Roles Size]", value: `${roleSize}`, inline: true },
-            { name: "[Channels Size]", value: `${channelSize}`, inline: true },
-            { name: "[Emojis Size]", value: `${emojiSize}`, inline: true },
-            { name: "[Creation Date]", value: `${creationDate}`, inline: true }
+            { name: "Owner", value: `${owner}` },
+            { name: "Member Count", value: `${memberCount}` },
+            { name: "Boosts", value: `Count: ${boosts.count}, Tier: ${boosts.tier}` },
+            { name: "Verification Level", value: `${verificationLevel}` },
+            { name: "Roles Size", value: `${roleSize}` },
+            { name: "Channels Size", value: `${channelSize}` },
+            { name: "Emojis Size", value: `${emojiSize}` },
+            { name: "Creation Date", value: `${creationDate}` }
         ])
         .setThumbnail(`${iconURL}`)
         .setFooter({
