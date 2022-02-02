@@ -33,6 +33,7 @@ export default class extends Command {
                 { name: `Informative`, value: `${commands.filter((c) => c.category === "Information").map((c) => `\`${c.name}\``).join(" | ")}` },
                 { name: `General`, value: `${commands.filter((c) => c.category === "General").map((c) => `\`${c.name}\``).join(" | ")}` },
                 { name: `Music (In development)`, value: `${commands.filter((c) => c.category === "Music").map((c) => `\`${c.name}\``).join(" | ")}` },
+                { name: `Economy`, value: `${commands.filter((c) => c.category === "Economy").map((c) => `\`${c.name}\``).join(" | ")}` },
                 { name: `Moderation`, value: `${commands.filter((c) => c.category === "Moderation").map((c) => `\`${c.name}\``).join(" | ")}` },
                 { name: `Config`, value: `${commands.filter((c) => c.category === "Config").map((c) => `\`${c.name}\``).join(" | ")}` }
             ])

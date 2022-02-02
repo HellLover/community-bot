@@ -3,6 +3,8 @@ import { EventEmitter } from "events";
 import { Client } from "../handlers/ClientHandler";
 import { Collection } from "discord.js";
 import { GuildModel, UserModel } from "./models/export/index";
+import { UserData } from "./models/UserModel";
+import { GuildData } from "./models/GuildModel";
 
 export class Database extends EventEmitter {
     connection: Connection;
@@ -84,7 +86,7 @@ export class Database extends EventEmitter {
         }
     }
 
-    async updateGuild(guildId: string, settings: object) {
+    async updateGuild(guildId: string, settings: Partial<GuildData>) {
         if(!guildId) console.warn("[Function: updateGuildInDB]: Missing the guild ID.");
         if(!settings) console.warn("[Function: updateGuildInDB]: Missing the settings option.");
         
@@ -105,4 +107,69 @@ export class Database extends EventEmitter {
           console.error(e);
         }
     }
+
+    async getUser(userId: string, guildId: string) {
+      if(!userId) this.client.logger.warn("[Function: getUser]: Missing the user ID.");
+      if(!guildId) this.client.logger.warn("[Function: getUser]: Missing the guild ID.")
+    
+        try {
+          let user = await UserModel.collection.findOne({ user_id: userId, guild_id: guildId });
+      
+          if (!user) {
+            user = await this.addUser(userId, guildId);
+          }
+      
+          return user;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      
+      async addUser(userId: string, guildId: string) {
+        if(!userId) this.client.logger.warn("[Function: addUser]: Missing the user ID.");
+        if(!guildId) this.client.logger.warn("[Function: addUser]: Missing the guild ID.")
+    
+        try {
+          const user = new UserModel.collection({ user_id: userId, guild_id: guildId });
+      
+          await user.save();
+      
+          return user;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      
+      async updateUser(userId: string, guildId: string, data: Partial<UserData>) {
+        if(!userId) this.client.logger.warn("[Function: updateUser]: Missing the user ID.");
+        if(!guildId) this.client.logger.warn("[Function: updateUser]: Missing the guild ID.");
+        if(!data) this.client.logger.warn("[Function: updateUser]: Missing the data option.");
+    
+        try {
+          if (typeof data !== "object") {
+            throw Error("'data' must be an object");
+          }
+      
+          const user = await this.getUser(userId, guildId);
+      
+          if (!user) {
+            await this.addUser(userId, guildId);
+          }
+      
+          await UserModel.collection.findOneAndUpdate({ user_id: userId, guild_id: guildId }, data);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      
+      async deleteUser(userId: string, guildId: string) {
+        if(!userId) this.client.logger.warn("[Function: deleteUser]: Missing the user ID.");
+        if(!guildId) this.client.logger.warn("[Function: deleteUser]: Missing the guild ID.");
+        
+        try {
+          await UserModel.collection.findOneAndDelete({ user_id: userId, guild_id: guildId });
+        } catch (e) {
+          console.error(e);
+        }
+      }
 }

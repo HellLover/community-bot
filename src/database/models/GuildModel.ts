@@ -1,4 +1,4 @@
-import { model, Schema, SchemaTypes } from "mongoose";
+import { model, Schema, SchemaTypes, Document, ObjectId } from "mongoose";
 import { config } from "../../config";
 
 const GuildModel = new Schema({
@@ -16,6 +16,19 @@ const GuildModel = new Schema({
         default: [],
     },
 })
+
+export type IGuild = Document & GuildData;
+
+export interface GuildData {
+    _id: ObjectId,
+    prefix: string,
+    custom_commands: CustomCommandData[]
+}
+
+export interface CustomCommandData {
+    name: string,
+    response: string
+}
 
 const Model = {
      collection: model("Guild", GuildModel),
