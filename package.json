@@ -4,7 +4,7 @@
   "description": "An example bot written in TypeScript & discord.js@13.3.1",
   "main": "./src/main.ts",
   "scripts": {
-    "bot": "npx ts-node-dev ."
+    "bot": "ts-node ."
   },
   "engines": {
     "node": "16.x"
