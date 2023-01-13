@@ -1,2 +1,2 @@
 # community-bot
-A Discord bot template written in TypeScript & discord.js@13.3.1
+A Discord community bot for Dolphin's server written using TypeScript & discord.js@14
