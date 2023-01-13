@@ -1,5 +1,4 @@
 import * as DJS from 'discord.js';
-import { Player } from "discord-player";
 
 import CommandHandler from "../handlers/CommandHandler";
 import EventHandler from "../handlers/EventHandler";
@@ -8,7 +7,7 @@ import { Database } from '../database/Database';
 import { CacheStorage } from '../database/CacheStorage';
 import { Logger } from '../utils/Logger';
 import { config } from "../config";
-import * as customEmojis from "../jsons/emojis.json"
+import customEmojis from "../../assets/jsons/emojis.json";
 
 export class Client extends DJS.Client {
     database: Database;
@@ -20,11 +19,19 @@ export class Client extends DJS.Client {
     config: typeof config;
     utils: ClientUtils;
     logger: Logger;
-    player: Player;
     customEmojis: typeof customEmojis;
 
-    constructor(options: DJS.ClientOptions) {
-        super(options);
+    constructor() {
+        super({
+            intents: [
+                DJS.GatewayIntentBits.GuildMembers,
+                DJS.GatewayIntentBits.Guilds,
+                DJS.GatewayIntentBits.GuildMessages,
+                DJS.GatewayIntentBits.MessageContent,
+                DJS.GatewayIntentBits.GuildPresences
+            ],
+            allowedMentions: { parse: ["roles", "everyone"], repliedUser: false }
+        });
 
         this.commands = new DJS.Collection();
         this.events = new DJS.Collection();
@@ -36,12 +43,6 @@ export class Client extends DJS.Client {
         this.cache = new CacheStorage();
         this.logger = new Logger(null);
         this.customEmojis = customEmojis;
-        this.player = new Player(this, {
-            ytdlOptions: {
-                quality: 'highestaudio',
-                highWaterMark: 1 << 25
-            }
-        })
 
     }
 

@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder, Colors } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -22,8 +22,8 @@ export default class extends Command {
         const customCmds = data.custom_commands;
 
         if(customCmds.length > 0) {
-            const embed = new MessageEmbed()
-            .setColor("LUMINOUS_VIVID_PINK")
+            const embed = new EmbedBuilder()
+            .setColor(Colors.LuminousVividPink)
             .setAuthor({ name: "Custom Commands" })
             .setDescription(`${customCmds.map((cmd, i) => `\`${i + 1}\`. \`${cmd.name}\``).join("\n")}`);
             return message.reply({ embeds: [embed] })

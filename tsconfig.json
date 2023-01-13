@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
       "target": "ESNEXT",
-      "module": "commonjs",
-      "moduleResolution": "node",
+      "module": "CommonJS",
+      "moduleResolution": "NodeNext",
       "resolveJsonModule": true,
       "strict": true,
       "esModuleInterop": true,
@@ -11,6 +11,9 @@
       "inlineSourceMap": true,
       "noImplicitAny": false,
       "allowJs": true,
-      "checkJs": true
+      "checkJs": true,
+      "paths": {
+        "#assets/*": ["./assets/*"]
+      }
     }
-  }
+}

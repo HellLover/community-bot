@@ -1,18 +1,12 @@
-import * as envConfig from "dotenv";
-envConfig.config();
+import "dotenv/config";
 
 import "./__structures/Guild";
 import "./__structures/Channel";
 import "./__structures/User";
-import "./__structures/Message";
 
 import { Client } from "./handlers/ClientHandler";
 
-const client = new Client({ 
-    intents: 4095,
-    partials: ["REACTION", "MESSAGE", "USER", "GUILD_MEMBER", "CHANNEL"],
-    allowedMentions: { parse: ["roles", "everyone"], repliedUser: false }
- })
+const client = new Client();
 
 client.register(process.env.BOT_TOKEN as string);
 

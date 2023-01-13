@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -30,9 +30,9 @@ export default class extends Command {
 
         message.channel.send({ content: `${this.client.customEmojis.success} | Unbanned ${user.tag}.` });
         user.send({ embeds: [
-            new MessageEmbed()
+            new EmbedBuilder()
             .setColor("#2f3136")
-            .setAuthor(`${message.author?.tag}`, message.author?.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: `${message.author?.tag}`, iconURL: message.author?.displayAvatarURL({ forceStatic: false }) })
             .setDescription(`You were unbanned from the server ${message.guild?.name}.`)
         ] }).catch(() => {})
         

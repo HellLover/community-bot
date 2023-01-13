@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { GuildMember, Message, MessageEmbed } from "discord.js";
+import { GuildMember, Message } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {

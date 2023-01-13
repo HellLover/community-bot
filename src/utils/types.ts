@@ -1,11 +1,11 @@
-import { TextChannel, MessageEmbed, CollectorFilter } from "discord.js";
+import { TextChannel, EmbedBuilder, MessageCollectorOptionsParams } from "discord.js";
 
 export interface EmbedPaginateOptions {
     channel: TextChannel,
-    pages: MessageEmbed[],
+    pages: EmbedBuilder[],
     timeout?: number,
     backEmoji?: string,
     stopEmoji?: string,
     forwardEmoji?: string,
-    filter?: CollectorFilter<any>
+    filter?: MessageCollectorOptionsParams<any>
 }

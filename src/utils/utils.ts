@@ -1,6 +1,6 @@
 import { Client } from "../handlers/ClientHandler";
 import * as DJS from "discord.js";
-import { EmbedPaginateOptions } from "../Interfaces";
+import { EmbedPaginateOptions } from "./types";
 
 export default class ClientUtils {
     client: Client
@@ -83,12 +83,12 @@ export default class ClientUtils {
       embedRequestedBy = (author: DJS.User) => {
         return {
             text: `Requested by ${author?.tag}`,
-            icon_url: `${author.displayAvatarURL({ format: "png", dynamic: true })}`
+            icon_url: `${author.displayAvatarURL({ extension: "png", forceStatic: false })}`
         }
       };
     
-      errorEmbed = (error): DJS.MessageEmbed => {
-        return new DJS.MessageEmbed()
+      errorEmbed = (error): DJS.EmbedBuilder => {
+        return new DJS.EmbedBuilder()
             .setColor("#2f3136")
             .setTitle("An error occured!")
             .addFields([
@@ -112,17 +112,16 @@ export default class ClientUtils {
       if (!options.backEmoji) options.backEmoji = "⬅";
       if (!options.stopEmoji) options.stopEmoji = "🛑";
       if (!options.forwardEmoji) options.forwardEmoji = "➡";
-      if (!options.filter) options.filter = () => true;
 
-      let ButtonRow = new DJS.MessageActionRow().addComponents([
-        new DJS.MessageButton().setEmoji(options.backEmoji).setCustomId("back").setStyle("PRIMARY"),
-        new DJS.MessageButton().setEmoji(options.stopEmoji).setCustomId("stop").setStyle("DANGER"),
-        new DJS.MessageButton().setEmoji(options.forwardEmoji).setCustomId("forward").setStyle("PRIMARY")
+      let ButtonRow = new DJS.ActionRowBuilder<DJS.ButtonBuilder>().addComponents([
+        new DJS.ButtonBuilder().setEmoji(options.backEmoji).setCustomId("back").setStyle(DJS.ButtonStyle.Primary),
+        new DJS.ButtonBuilder().setEmoji(options.stopEmoji).setCustomId("stop").setStyle(DJS.ButtonStyle.Danger),
+        new DJS.ButtonBuilder().setEmoji(options.forwardEmoji).setCustomId("forward").setStyle(DJS.ButtonStyle.Primary)
       ]);
  
       let currentPage = 0;
       const cpm = await options.channel.send({ embeds: [options.pages[currentPage].setFooter({ text: `Page ${currentPage + 1} / ${options.pages.length}` })], components: [ButtonRow] });   
-      const collector = cpm.createMessageComponentCollector({ time: options.timeout });
+      const collector = cpm.createMessageComponentCollector({ time: options.timeout, componentType: DJS.ComponentType.Button });
   
       collector.on("collect", async (i) => {
         if(!i.isButton()) return;

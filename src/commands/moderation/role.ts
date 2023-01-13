@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { Role, ColorResolvable, MessageEmbed } from "discord.js";
+import { Role, ColorResolvable, EmbedBuilder } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -31,11 +31,11 @@ export default class extends Command {
         switch(member.roles.cache.has(role.id) as boolean) {
             case true:
                 await member.roles.remove(role.id);
-                this.createEmbed(message, "RED", `✅ Changed roles for ${member.user.tag}, -${role.name}`)
+                this.createEmbed(message, "Red", `✅ Changed roles for ${member.user.tag}, -${role.name}`)
                 break;
             case false:
                 await member.roles.add(role.id);
-                this.createEmbed(message, "BLUE", `✅ Changed roles for ${member.user.tag}, +${role.name}`)
+                this.createEmbed(message, "Blue", `✅ Changed roles for ${member.user.tag}, +${role.name}`)
                 break;
         }
 
@@ -47,7 +47,7 @@ export default class extends Command {
     createEmbed(message, color: ColorResolvable, desc: string) {
         return message.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                 .setColor(color)
                 .setDescription(desc)
             ]

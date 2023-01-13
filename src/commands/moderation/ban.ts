@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -26,18 +26,18 @@ export default class extends Command {
         let reason = args.slice(1).join(" ");
         if(!reason) reason = "No reason provided."
 
-        if(member?.permissions.has("BAN_MEMBERS") || !member?.bannable) return message.reply({ content: `${this.client.customEmojis.error} | Couldn't ban this member.` });
+        if(member?.permissions.has("BanMembers") || !member?.bannable) return message.reply({ content: `${this.client.customEmojis.error} | Couldn't ban this member.` });
 
         await message.guild?.members.ban(member.user, {
             reason
         })
         message.channel.send({ content: `${this.client.customEmojis.success} | Banned ${member.user.tag} from the server.` });
         member.user.send({ embeds: [
-            new MessageEmbed()
-            .setColor("#2f3136")
+            new EmbedBuilder()
+            .setColor(0x2f3136)
             .setAuthor({
                 name: `${message.author?.tag}`,
-                iconURL: `${message.author?.displayAvatarURL({ dynamic: true })}`
+                iconURL: `${message.author?.displayAvatarURL({ forceStatic: false })}`
             })
             .setDescription(`You were banned from the server ${message.guild?.name}${reason ? ` for **${reason}**.` : "."}`)
         ] }).catch(() => {})

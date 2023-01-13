@@ -1,11 +1,11 @@
-import { Channel, MessageEmbed } from "discord.js";
+import { GuildChannel, EmbedBuilder } from "discord.js";
 
-exports = Object.defineProperties(Channel.prototype, {
+exports = Object.defineProperties(GuildChannel.prototype, {
     error: {
         value: function(...args) {
             try {
                 const emoji = this.client.customEmojis['error'];
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                   .setColor("#2f3136")
                   .setDescription(`${emoji} | ${args}`);
                 return this.send({ embeds: [embed] })
@@ -19,7 +19,7 @@ exports = Object.defineProperties(Channel.prototype, {
         value: function(...args) {
             try {
                 const emoji = this.client.customEmojis['success'];
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                   .setColor("#2f3136")
                   .setDescription(`${emoji} | ${args}`);
                 return this.send({ embeds: [embed] })

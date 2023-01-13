@@ -1,6 +1,6 @@
 import { Event } from "../../structures/Events";
 import { Client } from "../../handlers/ClientHandler";
-import { GuildMember, TextChannel, VoiceChannel } from "discord.js";
+import { GuildMember, VoiceChannel } from "discord.js";
 
 export default class extends Event {
     constructor(client: Client) {
@@ -12,33 +12,28 @@ export default class extends Event {
 
         if(member.guild.id == "715290558779883532") {
             const role = member.guild.roles.cache.get("715298416199991346");
-            const logchannel = this.client.channels.cache.get("931109092498497576") as TextChannel
 
             if(role && !member.roles.cache.has(role.id)) {
                 member.roles.add(role.id).catch(() => {})
             }
 
-            if(logchannel) {
-                logchannel.send({ content: `📥 ${member.user.tag} joined the server! [Account created: <t:${Math.round(member.user.createdTimestamp / 1000)}>]` });
-            }
-
-            await member.user.send({
-                embeds: [{
-                    title: `Welcome to ${member.guild.name}!`,
-                    description: `Feel free to ask questions or communicate with other members. Have fun in our server! :)\n\n[Server invite](https://discord.gg/TYhSGhWGvm)\n[Invite Dolphin](https://discord.com/api/oauth2/authorize?client_id=713713873915478036&permissions=8&scope=bot)`,
-                    color: "#2f3136"
-                }]
-            }).catch(() => {})
-
             const voiceChannels = {
+                totalCount: "1062354998152937523",
                 memberCount: "933419726447726632",
                 botCount: "933420137640501338"
             }
 
+            if(member.guild.memberCount !== member.guild.members.cache.size) await member.guild.members.fetch();
+
+            const totalMembersChannel = member.guild.channels.cache.get(voiceChannels.totalCount) as VoiceChannel, totalMembersSize = member.guild.memberCount;
+            const botsChannel = member.guild.channels.cache.get(voiceChannels.botCount) as VoiceChannel, botsSize = member.guild.members.cache.filter((m) => m.user.bot).size;
+            const membersChannel = member.guild.channels.cache.get(voiceChannels.memberCount) as VoiceChannel, membersSize = totalMembersSize - botsSize;
+
             setTimeout(() => {
-                (this.client.channels.cache.get(voiceChannels.memberCount) as VoiceChannel).setName(`[👥] Members: ${member.guild.members.cache.filter((m) => !m.user.bot).size}`);
-                (this.client.channels.cache.get(voiceChannels.botCount) as VoiceChannel).setName(`[🤖] Bots: ${member.guild.members.cache.filter((m) => m.user.bot).size}`);
-            }, 60 * 1000) // 1 minute cooldown
+                totalMembersChannel.setName(`[👥] Total: ${totalMembersSize}`);
+                membersChannel.setName(`  ↳ Members: ${membersSize}`);
+                botsChannel.setName(`  ↳ Bots: ${botsSize}`);
+            }, 30 * 1000) // 30 seconds cooldown
         }
     }
 }

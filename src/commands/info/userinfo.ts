@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { Message, MessageEmbed } from "discord.js";
+import { Message, EmbedBuilder, ActivityType } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -45,7 +45,7 @@ export default class extends Command {
         const member = await this.client.utils.findMember(message, args, { allowAuthor: true })
         if(!member) return message.reply({ content: "Please, provide a mention/tag/id for this command."})
 
-        let gifAvatar = member.user.avatarURL({dynamic: true});
+        let gifAvatar = member.user.avatarURL({ forceStatic: false });
     
         let badges = member.user.flags ? member.user.flags.toArray().map(flag => Badges[flag]).join(' ') : undefined;
     
@@ -53,11 +53,11 @@ export default class extends Command {
           badges = badges + " <:dolphin_nitro:814097359423930378>"
         }
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
         .setColor("#2f3136")
         .setAuthor({
             name: `Information about ${member.displayName}`,
-            iconURL: member.user.displayAvatarURL({ format: "png", dynamic: true })
+            iconURL: member.user.displayAvatarURL({ extension: "png", forceStatic: false })
         })
         .addFields([
             { name: "User", value: `${member.user.tag} ${badges}` },
@@ -65,19 +65,22 @@ export default class extends Command {
             { name: "Account Created", value: `<t:${Math.round(member.user.createdTimestamp / 1000)}:R>\n(<t:${Math.round(member.user.createdTimestamp / 1000)}>)`, inline: true },
             { name: "Joined The Guild", value: `<t:${Math.round(member.joinedTimestamp! / 1000)}:R>\n(<t:${Math.round(member.joinedTimestamp! / 1000)}>)`, inline: true },
         ])
-        .setThumbnail(member.user.displayAvatarURL({ format: "png", dynamic: true, size: 2048 }))
+        .setThumbnail(member.user.displayAvatarURL({ extension: "png", forceStatic: false, size: 2048 }))
         .setFooter({
             text: `Requested by ${message.author.tag}`,
-            iconURL: message.author.displayAvatarURL({ format: "png", dynamic: true })
+            iconURL: message.author.displayAvatarURL({ extension: "png", forceStatic: false })
         })
         .setTimestamp()
 
         if(member.presence?.activities.length! > 0) {
-            embed.setDescription(`${member.presence?.activities.map((a) => a.type == 'CUSTOM' ? `↳ **Custom Status**: ${a.emoji || ""} ${a.state}` : `↳ **${a.type.toLowerCase()}**: [${a.name}](${a.url})`).join("\n")}`)
+            embed.setDescription(`${member.presence?.activities.map((a) => a.type == ActivityType.Custom ? `↳ **Custom Status**: ${a.emoji || ""} ${a.state}` : `↳ **${a.type}**: [${a.name}](${a.url})`).join("\n")}`)
         }
 
-        if(member.presence && member.presence?.status !== "offline") {
-            embed.addField("Status", `${statusMap[member.presence?.status!]} (${deviceMap[Object.keys(member.presence?.clientStatus!)[0]]})`)
+        if(member.presence && member.presence.status !== "offline") {
+            embed.addFields({
+                name: "Status", 
+                value: `${statusMap[member.presence?.status!]} (${deviceMap[Object.keys(member.presence?.clientStatus!)[0]]})`
+            })
         }
 
         return message.reply({ embeds: [embed] })

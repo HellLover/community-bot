@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { Message, MessageEmbed, MessageActionRow, MessageButton, Guild } from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -29,9 +29,9 @@ export default class extends Command {
         const roleSize = guild?.roles.cache.size;
         const channelSize = guild?.channels.cache.size;
         const emojiSize = guild?.emojis.cache.size;
-        const iconURL = guild?.iconURL({ size: 2048, format: "png" });
+        const iconURL = guild?.iconURL({ size: 2048, extension: "png" });
 
-        const GuildEmbed = new MessageEmbed()
+        const GuildEmbed = new EmbedBuilder()
         .setAuthor({
             name: `Information about the server [${name}]`,
             iconURL: `${iconURL}`

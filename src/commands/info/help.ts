@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { MessageEmbed, MessageButton, MessageActionRow, Message } from "discord.js";
+import { EmbedBuilder, ButtonBuilder, ActionRowBuilder, Message, ButtonStyle } from "discord.js";
 import { stripIndents } from "common-tags";
 
 export default class extends Command {
@@ -22,29 +22,27 @@ export default class extends Command {
         const prefix = (await this.client.database.getGuild(message.guild!.id)).prefix;
 
         if(!cmd) {
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
             .setAuthor({
                 name: `Commands List | Prefix: ${prefix}`,
-                iconURL: this.client?.user?.displayAvatarURL({ format: "png" })
+                iconURL: this.client?.user?.displayAvatarURL({ extension: "png" })
             })
             .setColor("#2f3136")
             .setDescription(`**Tip:** Use \`${prefix}help <command>\` to get additional information about the command.`)
             .addFields([
-                { name: `Informative`, value: `${commands.filter((c) => c.category === "Information").map((c) => `\`${c.name}\``).join(" | ")}` },
+                { name: `Utility`, value: `${commands.filter((c) => c.category === "Information").map((c) => `\`${c.name}\``).join(" | ")}` },
                 { name: `General`, value: `${commands.filter((c) => c.category === "General").map((c) => `\`${c.name}\``).join(" | ")}` },
-                { name: `Music (In development)`, value: `${commands.filter((c) => c.category === "Music").map((c) => `\`${c.name}\``).join(" | ")}` },
-                { name: `Economy`, value: `${commands.filter((c) => c.category === "Economy").map((c) => `\`${c.name}\``).join(" | ")}` },
                 { name: `Moderation`, value: `${commands.filter((c) => c.category === "Moderation").map((c) => `\`${c.name}\``).join(" | ")}` },
                 { name: `Config`, value: `${commands.filter((c) => c.category === "Config").map((c) => `\`${c.name}\``).join(" | ")}` }
             ])
             .setTimestamp()
             .setFooter({
                 text: `Requested by ${message.author.tag}`,
-                iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" })
+                iconURL: message.author.displayAvatarURL({ forceStatic: false, extension: "png" })
             })
 
-            let buttonRaw = new MessageActionRow().addComponents([
-                new MessageButton().setCustomId("delete").setStyle("DANGER").setEmoji("<:Error:927240559905620009>").setLabel("Close"),
+            let buttonRaw = new ActionRowBuilder<ButtonBuilder>().addComponents([
+                new ButtonBuilder().setCustomId("delete").setStyle(ButtonStyle.Danger).setEmoji("<:Error:927240559905620009>").setLabel("Close"),
             ]);
 
             const msg = await message.channel.send({ embeds: [embed], components: [buttonRaw] });
@@ -69,11 +67,11 @@ export default class extends Command {
             const command = this.client.commands.get(cmd) || this.client.events.get(cmd);
             if(!command) return message.reply({ content: `The command \`${cmd}\` doesn't exist.` });
 
-            const cmdInformation = new MessageEmbed()
+            const cmdInformation = new EmbedBuilder()
             .setColor("#2f3136")
             .setAuthor({
                 name: `${this.client?.user?.username}`,
-                iconURL: this.client?.user?.displayAvatarURL({ format: "png" })
+                iconURL: this.client?.user?.displayAvatarURL({ extension: "png" })
             })
             .setDescription(stripIndents`
                 **${command.name}**${command.description ? ` - ${command.description}` : ""}
@@ -87,13 +85,13 @@ export default class extends Command {
             ])
             .setFooter({
                 text: `Requested by ${message.author.tag}`,
-                iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" })
+                iconURL: message.author.displayAvatarURL({ forceStatic: false, extension: "png" })
             })
             return message.reply({ embeds: [cmdInformation] })
         }
 
       } catch(e) {
-        return message.channel.send({ embeds: [this.client.utils.errorEmbed(e)] });
+            return message.channel.send({ embeds: [this.client.utils.errorEmbed(e)] });
       } 
     }
 }

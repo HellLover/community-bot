@@ -27,7 +27,7 @@ export default class extends Command {
 
         const member = await this.client.utils.findMember(message, args);
         if(!member) return message.reply({ content: `${this.client.customEmojis.error} | Couldn't find the member.` });
-        if(member.permissions.has("ADMINISTRATOR")) return message.reply({ content: "Couldn't time out this member." })
+        if(member.permissions.has("Administrator")) return message.reply({ content: "Couldn't time this member out." })
 
         const time = args[1];
         const TimeRegex = /[0-9](s|m|h|d)/

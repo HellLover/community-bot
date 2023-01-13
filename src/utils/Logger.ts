@@ -1,5 +1,5 @@
+import util from "node:util";
 import chalk from "chalk";
-import util from "util";
 
 const output = (msg: string) => `[${new Date().toLocaleString()}] | ${msg}`;
 

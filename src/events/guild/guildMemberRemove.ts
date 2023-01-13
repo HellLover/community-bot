@@ -8,24 +8,26 @@ export default class extends Event {
     }
 
     async execute(member: GuildMember) {
-        if(!member.guild || member.user.bot) return;
+        if(!member.guild) return;
 
         if(member.guild.id == "715290558779883532") {
-            const logchannel = this.client.channels.cache.get("931109092498497576") as TextChannel
-
-            if(logchannel) {
-                logchannel.send({ content: `📤 ${member.user.tag} left the server! [Joined the server: <t:${Math.round(member.joinedTimestamp! / 1000)}:R>]` }); 
-            }
-
             const voiceChannels = {
+                totalCount: "1062354998152937523",
                 memberCount: "933419726447726632",
                 botCount: "933420137640501338"
             }
 
+            if(member.guild.memberCount !== member.guild.members.cache.size) await member.guild.members.fetch();
+            
+            const totalMembersChannel = member.guild.channels.cache.get(voiceChannels.totalCount) as VoiceChannel, totalMembersSize = member.guild.memberCount;
+            const botsChannel = member.guild.channels.cache.get(voiceChannels.botCount) as VoiceChannel, botsSize = member.guild.members.cache.filter((m) => m.user.bot).size;
+            const membersChannel = member.guild.channels.cache.get(voiceChannels.memberCount) as VoiceChannel, membersSize = totalMembersSize - botsSize;
+
             setTimeout(() => {
-                (this.client.channels.cache.get(voiceChannels.memberCount) as VoiceChannel).setName(`[👥] Members: ${member.guild.members.cache.filter((m) => !m.user.bot).size}`);
-                (this.client.channels.cache.get(voiceChannels.botCount) as VoiceChannel).setName(`[🤖] Bots: ${member.guild.members.cache.filter((m) => m.user.bot).size}`);
-            }, 60 * 1000) // 1 minute cooldown
+                totalMembersChannel.setName(`[👥] Total: ${totalMembersSize}`);
+                membersChannel.setName(`  ↳ Members: ${membersSize}`);
+                botsChannel.setName(`  ↳ Bots: ${botsSize}`);
+            }, 30 * 1000) // 30 seconds cooldown
         }
     }
 }
