@@ -8,7 +8,7 @@ export default class extends Command {
             description: "Lists the server's bans.",
             aliases: [],
             category: "Moderation",
-            memberPermission: ["BAN_MEMBERS"],
+            memberPermission: ["BanMembers"],
             cooldown: 10
         })
     }

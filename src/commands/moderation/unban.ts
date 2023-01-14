@@ -8,8 +8,8 @@ export default class extends Command {
             description: "Unban a member.",
             aliases: [],
             category: "Moderation",
-            memberPermission: ["BAN_MEMBERS"],
-            botPermission: ["BAN_MEMBERS"],
+            memberPermission: ["BanMembers"],
+            botPermission: ["BanMembers"],
             cooldown: 5
         })
     }

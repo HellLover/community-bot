@@ -7,8 +7,7 @@ export default class extends Command {
         super(client, "taglist", {
             description: "Lists all the server's tags.",
             aliases: [],
-            category: "Config",
-            memberPermission: [],
+            category: "Information",
             cooldown: 30
         })
     }

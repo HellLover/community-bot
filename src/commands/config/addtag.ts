@@ -8,7 +8,7 @@ export default class extends Command {
             description: "Add a tag to the guild.",
             aliases: [],
             category: "Config",
-            memberPermission: ["ADMINISTRATOR"],
+            memberPermission: ["Administrator"],
             usage: ".addtag <name> <response>",
             cooldown: 10
         })
@@ -42,13 +42,12 @@ export default class extends Command {
         const data = {
             name: cmdName.toLowerCase(),
             response: cmdResponse,
+            author: message.author.id,
+            createdAt: new Date()
         };
 
-        if (!commands) {
-             await this.client.database.updateGuild(message.guild!.id, { custom_commands: [data] });
-        } else {
-             await this.client.database.updateGuild(message.guild!.id, { custom_commands: [...commands, data] });
-        }
+        await this.client.database.updateGuild(message.guild!.id, { custom_commands: !commands ? [data] : [...commands, data] });
+
         return message.channel["success"](`Successfully created the tag \`${cmdName}\``)
 
       } catch(e) {

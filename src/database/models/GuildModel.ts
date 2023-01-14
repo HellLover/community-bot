@@ -1,3 +1,4 @@
+import { Snowflake } from "discord.js";
 import { model, Schema, SchemaTypes, Document, ObjectId } from "mongoose";
 import { config } from "../../config";
 
@@ -27,7 +28,9 @@ export interface GuildData {
 
 export interface CustomCommandData {
     name: string,
-    response: string
+    response: string,
+    author: Snowflake,
+    createdAt: Date
 }
 
 const Model = {

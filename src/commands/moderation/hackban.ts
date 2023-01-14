@@ -8,8 +8,8 @@ export default class extends Command {
             description: "Ban a user (not existing in the server) from the server.",
             aliases: [],
             category: "Moderation",
-            memberPermission: ["BAN_MEMBERS"],
-            botPermission: ["BAN_MEMBERS"],
+            memberPermission: ["BanMembers"],
+            botPermission: ["BanMembers"],
             cooldown: 5
         })
     }

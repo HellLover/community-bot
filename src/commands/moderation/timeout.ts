@@ -9,8 +9,8 @@ export default class extends Command {
             description: "Time out a member.",
             aliases: [],
             category: "Moderation",
-            memberPermission: ["ADMINISTRATOR"],
-            botPermission: ["ADMINISTRATOR"],
+            memberPermission: ["Administrator"],
+            botPermission: ["Administrator"],
             cooldown: 5,
             usage: ".timeout <@member> <time_amount>",
             examples: [

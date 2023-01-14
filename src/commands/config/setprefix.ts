@@ -7,7 +7,7 @@ export default class extends Command {
             description: "Change the bot's prefix.",
             aliases: [],
             category: "Config",
-            memberPermission: ["ADMINISTRATOR"],
+            memberPermission: ["Administrator"],
             cooldown: 10
         })
     }

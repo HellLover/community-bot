@@ -8,8 +8,8 @@ export default class extends Command {
             description: "Add or remove a role from the member.",
             aliases: [],
             category: "Moderation",
-            memberPermission: ["MANAGE_ROLES"],
-            botPermission: ["MANAGE_ROLES"],
+            memberPermission: ["ManageRoles"],
+            botPermission: ["ManageRoles"],
             cooldown: 5
         })
     }

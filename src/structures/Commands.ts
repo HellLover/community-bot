@@ -1,14 +1,15 @@
+import { PermissionResolvable } from "discord.js";
 import { Client } from "../handlers/ClientHandler";
 
 interface CommandOptions {
     name?: string;
     description?: string;
     usage?: string;
-    aliases?: any[];
+    aliases?: string[];
     category?: string;
     examples?: string[];
-    memberPermission?: any[];
-    botPermission?: any[];
+    memberPermission?: PermissionResolvable[];
+    botPermission?: PermissionResolvable[];
     cooldown?: number;
     ownerOnly?: boolean;
 }

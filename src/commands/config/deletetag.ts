@@ -8,7 +8,7 @@ export default class extends Command {
             description: "Delete a tag from the guild.",
             aliases: ["removetag"],
             category: "Config",
-            memberPermission: ["ADMINISTRATOR"],
+            memberPermission: ["Administrator"],
             usage: ".deletetag <name>",
             cooldown: 10
         })
