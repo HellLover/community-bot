@@ -7,7 +7,7 @@ export default class extends Command {
     constructor(client: Client) {
         super(client, "taginfo", {
             description: "Shows information about a specified tag.",
-            aliases: [],
+            aliases: ["viewtag"],
             category: "Information",
             cooldown: 10
         })
@@ -33,7 +33,11 @@ export default class extends Command {
             minute: "2-digit",
             second: "2-digit"
         }).format(foundTag.createdAt)
-        const tagAuthor = message.guild.members.cache.get(foundTag.author) ?? ({ user: { tag: "Unknown#0000" }, id: "" });
+        const tagAuthor = message.guild.members.cache.get(foundTag.author) ?? (await message.guild.members.fetch(foundTag.author));
+
+        if(foundTag.visibility === "private" && foundTag.author !== message.author.id) {
+            return message.reply({ content: "You can't view this tag as it's marked as `private`." }).then((msg) => setTimeout(() => msg.delete(), 7000));
+        }
 
         const embed = new EmbedBuilder()
             .setColor(Colors.LuminousVividPink)
@@ -42,6 +46,11 @@ export default class extends Command {
                 {
                     name: "Content",
                     value: `${foundTag.response}`,
+                    inline: false
+                },
+                {
+                    name: "Description",
+                    value: `${foundTag.description ?? "No description"}`,
                     inline: false
                 },
                 {

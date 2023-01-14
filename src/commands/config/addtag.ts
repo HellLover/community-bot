@@ -1,6 +1,16 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
-import { Message } from "discord.js";
+import { 
+    ActionRowBuilder, 
+    ButtonBuilder, 
+    ButtonStyle, 
+    Colors, 
+    ComponentType, 
+    Message, 
+    ModalBuilder, 
+    TextInputBuilder, 
+    TextInputStyle 
+} from "discord.js";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -17,38 +27,70 @@ export default class extends Command {
     async execute(message: Message, args: any[]) {
 
       try {
-        
-        const cmdName = args[0];
-        const cmdResponse = args.slice(1).join(" ");
 
-        if (!cmdName) {
-            return message.channel.send({ content: `You need to provide a name for the tag (\`${this.usage}\`).` });
-        }
+        const modal = new ModalBuilder()
+            .setCustomId("tag_create")
+            .setTitle("Create a new tag")
+            .addComponents(
+                new ActionRowBuilder<TextInputBuilder>()
+                    .addComponents(
+                        new TextInputBuilder()
+                            .setLabel('Name')
+                            .setCustomId('tag_create_name')
+                            .setPlaceholder('Enter a name for the tag...')
+                            .setStyle(TextInputStyle.Short)
+                            .setRequired(true)
+                            .setMaxLength(10)
+                            .setMinLength(3)
+                    ),
+                new ActionRowBuilder<TextInputBuilder>()
+                    .addComponents(
+                        new TextInputBuilder()
+                            .setLabel('Description')
+                            .setCustomId('tag_create_description')
+                            .setPlaceholder('Enter a description for the tag...')
+                            .setStyle(TextInputStyle.Paragraph)
+                            .setRequired(false)
+                            .setMaxLength(1000)
+                    ),
+                new ActionRowBuilder<TextInputBuilder>()
+                    .addComponents(
+                        new TextInputBuilder()
+                            .setLabel('Content')
+                            .setCustomId('tag_create_content')
+                            .setPlaceholder('Enter a response for the tag...')
+                            .setStyle(TextInputStyle.Paragraph)
+                            .setRequired(true)
+                            .setMaxLength(3000)
+                            .setMinLength(10)
+                    ),
+            )
 
-        if (!cmdResponse) {
-            return message.channel.send({ content: `You need to provide a response for the tag (\`${this.usage}\`).` });
-        }
+        const button = new ActionRowBuilder<ButtonBuilder>()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId("tag_showModal_button")
+                    .setLabel("Create a tag")
+                    .setStyle(ButtonStyle.Primary)
+            )
 
-        const guild = await this.client.database.getGuild(message.guild!.id);
-        const commands = guild.custom_commands;
+        const confirmMessage = await message.reply({ embeds: [{ description: "Please click on the button below to create a tag.", color: Colors.Blue }], components: [button] })
 
-        if (commands && commands.find((x) => x.name === cmdName.toLowerCase()))
-          return message.channel["error"]("Such a tag already exists in the guild.");
+        const collector = confirmMessage.createMessageComponentCollector({ time: 60 * 1000, componentType: ComponentType.Button, max: 1 })
 
-        if (this.client.commands.has(cmdName) || this.client.aliases.has(cmdName)) {
-            return message.channel["error"]("Cannot create a tag which name matches one of the client's commands.");
-        }
+        collector.on("collect", async (interaction) => {
+            if(interaction.user.id !== message.author.id) interaction.reply({ content: "You can't do this!", ephemeral: true });
 
-        const data = {
-            name: cmdName.toLowerCase(),
-            response: cmdResponse,
-            author: message.author.id,
-            createdAt: new Date()
-        };
+            if(interaction.customId === "tag_showModal_button") await interaction.showModal(modal);
+        })
 
-        await this.client.database.updateGuild(message.guild!.id, { custom_commands: !commands ? [data] : [...commands, data] });
+        collector.on("end", (_, reason) => {
+            if(reason === "time") {
+                confirmMessage.edit({ embeds: [{ description: "Time out. Please run the command again if you still want to create a tag!", color: Colors.Red }], components: [] });
+            }
 
-        return message.channel["success"](`Successfully created the tag \`${cmdName}\``)
+            confirmMessage.edit({ embeds: [{ description: "The tag is being created or has already been created.", color: Colors.Yellow }], components: [] });
+        })
 
       } catch(e) {
           return message.reply({ content: `An error occured:\n\`\`\`js\n${e}\n\`\`\`` })

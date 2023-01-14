@@ -21,7 +21,7 @@ const GuildModel = new Schema({
 export type IGuild = Document & GuildData;
 
 export interface GuildData {
-    _id: ObjectId,
+    id: string,
     prefix: string,
     custom_commands: CustomCommandData[]
 }
@@ -30,7 +30,9 @@ export interface CustomCommandData {
     name: string,
     response: string,
     author: Snowflake,
-    createdAt: Date
+    createdAt: Date,
+    description: string,
+    visibility: "public" | "private"
 }
 
 const Model = {

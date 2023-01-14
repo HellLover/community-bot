@@ -28,9 +28,15 @@ export default class extends Event {
         let cmd = args?.shift()?.toLowerCase();
         const command = this.client.commands.get(cmd) || this.client.commands.get(this.client.aliases.get(cmd));
         
-        if (customCmds) {
+        if (customCmds.length) {
           const customCmd = customCmds.find((x) => x.name === cmd);
-          if (customCmd) return message.reply({ content: `${customCmd.response}` });
+          if (customCmd) {
+            if(customCmd.visibility === "private" && customCmd.author !== message.author.id) {
+                return message.reply({ content: "You can't use this tag as it's marked as `private`." }).then((msg) => setTimeout(() => msg.delete(), 7000));
+            }
+
+            return message.reply({ content: `${customCmd.response}` });
+          }
         }
 
         if(!command) return;

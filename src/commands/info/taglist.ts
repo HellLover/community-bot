@@ -12,7 +12,7 @@ export default class extends Command {
         })
     }
 
-    async execute(message: Message, args: any[]) {
+    async execute(message: Message<true>, args: any[]) {
 
       try {
         
@@ -23,8 +23,8 @@ export default class extends Command {
         if(customCmds.length > 0) {
             const embed = new EmbedBuilder()
             .setColor(Colors.LuminousVividPink)
-            .setAuthor({ name: "Custom Commands" })
-            .setDescription(`${customCmds.map((cmd, i) => `\`${i + 1}\`. \`${cmd.name}\``).join("\n")}`);
+            .setAuthor({ name: "Tags" })
+            .setDescription(`${customCmds.map((cmd, i) => `\`${i + 1}\`. \`${cmd.name}\` [By \`${message.guild.members.cache.get(cmd.author)?.user.tag ?? "Unknown#0000"}\`]`).join("\n")}`);
             return message.reply({ embeds: [embed] })
         } else {
             return message.reply({ content: "There is no tag in this guild yet." })
