@@ -8,6 +8,7 @@ import { CacheStorage } from '../database/CacheStorage';
 import { Logger } from '../utils/Logger';
 import { config } from "../config";
 import customEmojis from "../../assets/jsons/emojis.json";
+import { QuickDB } from 'quick.db';
 
 export class Client extends DJS.Client {
     database: Database;
@@ -20,6 +21,7 @@ export class Client extends DJS.Client {
     utils: ClientUtils;
     logger: Logger;
     customEmojis: typeof customEmojis;
+    levels: QuickDB
 
     constructor() {
         super({
@@ -43,7 +45,7 @@ export class Client extends DJS.Client {
         this.cache = new CacheStorage();
         this.logger = new Logger(null);
         this.customEmojis = customEmojis;
-
+        this.levels = new QuickDB();
     }
 
     async register(token: string) {

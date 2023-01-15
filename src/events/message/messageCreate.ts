@@ -13,13 +13,41 @@ export default class extends Event {
         if(message.channel.type === ChannelType.DM) return;
         if(!message.channel.permissionsFor(message.guild.members.me as DJS.GuildMember).has(["SendMessages", "ViewChannel"])) return;
 
-        const GuildData = await this.client.database.getGuild(message.guild?.id)
+        const GuildData = await this.client.database.getGuild(message.guild?.id);
 
         let prefix = GuildData.prefix;
         let customCmds = GuildData.custom_commands;
 
         if(message.content.match(new RegExp(`^<@!?${this.client?.user?.id}>( |)$`))){
             return message.reply({ embeds: [{ color: DJS.Colors.Red, description: `My prefix for this server is \`${prefix}\`!` }] })
+        }
+
+        if(GuildData.leveling.enabled) {
+            const userLevelData = await this.client.levels.get<Record<"xp" | "level", number>>(`xp_${message.author.id}_${message.guild.id}`);
+            if(!userLevelData) return this.client.levels.set(`xp_${message.author.id}_${message.guild.id}`, {
+                xp: 0,
+                level: 1
+            });
+
+            if (userLevelData.xp >= Infinity) return;
+
+            let currentXp = userLevelData.xp, currentLvl = userLevelData.level;
+            let nextLvlXp = currentLvl * 300;
+
+            await this.client.levels.set(`xp_${message.author.id}_${message.guild.id}`, {
+                xp: currentXp + Number(Math.floor(Math.random() * 70) + 1),
+                level: currentLvl
+            })
+
+            if(nextLvlXp <= userLevelData.xp) {
+                await this.client.levels.set(`xp_${message.author.id}_${message.guild.id}`, {
+                    xp: userLevelData.xp - nextLvlXp,
+                    level: currentLvl + 1
+                })
+
+                return message.channel.send(`[LEVEL_UP] ${message.author.tag}: Level ${userLevelData.level}, Xp ${userLevelData.xp}`)
+                    .then((msg) => setTimeout(() => msg.deletable && msg.delete(), 7000))
+            }
         }
   
         if (!message.content.toLowerCase().startsWith(`${prefix}`)) return;

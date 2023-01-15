@@ -14,8 +14,14 @@ const GuildModel = new Schema({
     },
     custom_commands: { 
         type: SchemaTypes.Array,
-        default: [],
+        required: false,
+        default: []
     },
+    leveling: {
+        type: SchemaTypes.Boolean,
+        required: false,
+        default: true
+    }
 })
 
 export type IGuild = Document & GuildData;
@@ -23,7 +29,8 @@ export type IGuild = Document & GuildData;
 export interface GuildData {
     id: string,
     prefix: string,
-    custom_commands: CustomCommandData[]
+    custom_commands: CustomCommandData[],
+    leveling: boolean
 }
 
 export interface CustomCommandData {
