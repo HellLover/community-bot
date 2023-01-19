@@ -13,15 +13,20 @@ export default class extends Command {
         })
     }
 
-    async execute(message: Message, args: string[]) {
+    async execute(message: Message<true>, args: string[]) {
 
      try {
         const commands = this.client.commands;
-        const cmd = args[0]
+        const cmd = args[0];
+        const categories: string[] = [];
 
-        const prefix = (await this.client.database.getGuild(message.guild!.id)).prefix;
+        const prefix = this.client.configs.get(message.guildId)?.prefix;
 
         if(!cmd) {
+            commands.forEach((command) => {
+                if(!categories.includes(command.category)) categories.push(command.category);
+            });
+
             const embed = new EmbedBuilder()
             .setAuthor({
                 name: `Commands List | Prefix: ${prefix}`,
@@ -30,10 +35,12 @@ export default class extends Command {
             .setColor("#2f3136")
             .setDescription(`**Tip:** Use \`${prefix}help <command>\` to get additional information about the command.`)
             .addFields([
-                { name: `Utility`, value: `${commands.filter((c) => c.category === "Information").map((c) => `\`${c.name}\``).join(" | ")}` },
-                { name: `General`, value: `${commands.filter((c) => c.category === "General").map((c) => `\`${c.name}\``).join(" | ")}` },
-                { name: `Moderation`, value: `${commands.filter((c) => c.category === "Moderation").map((c) => `\`${c.name}\``).join(" | ")}` },
-                { name: `Config`, value: `${commands.filter((c) => c.category === "Config").map((c) => `\`${c.name}\``).join(" | ")}` }
+                ...categories.map((cat) => {
+                    return {
+                        name: `${cat}`,
+                        value: `${commands.filter((c) => c.category === cat).map((c) => `\`${c.name}\``).join(" | ")}`
+                    }
+                })
             ])
             .setTimestamp()
             .setFooter({

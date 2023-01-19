@@ -12,8 +12,11 @@
       "noImplicitAny": false,
       "allowJs": true,
       "checkJs": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
       "paths": {
-        "#assets/*": ["./assets/*"]
+        "#assets/*": ["./assets/*"],
+        "#entities/*": ["./src/database/entities/*"]
       }
     }
 }

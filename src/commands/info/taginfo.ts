@@ -1,7 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../handlers/ClientHandler";
 import { Message, EmbedBuilder, Colors, codeBlock } from "discord.js";
-import { CustomCommandData } from "../../database/models/GuildModel";
 
 export default class extends Command {
     constructor(client: Client) {
@@ -20,9 +19,9 @@ export default class extends Command {
         const tag = args[0];
         if(!tag) return message.reply({ content: "Please include a tag name." })
 
-        const availableTags: CustomCommandData[] = (await this.client.database.getGuild(message.guildId)).custom_commands;
+        const availableTags = this.client.configs.get(message.guildId)?.customCommands;
 
-        const foundTag = availableTags.find((x) => tag.toLowerCase() === x.name.toLowerCase());
+        const foundTag = availableTags?.length && availableTags.find((x) => tag.toLowerCase() === x.name.toLowerCase());
         if(!foundTag) return message.reply({ content: `I'm sorry, there is no tag in this server with name \`${tag}\`.` })
 
         const tagCreationDate = new Intl.DateTimeFormat("ru", {
@@ -41,7 +40,7 @@ export default class extends Command {
 
         const embed = new EmbedBuilder()
             .setColor(Colors.LuminousVividPink)
-            .setAuthor({ name: `Tag: ${tag}`, iconURL: `${message.guild.iconURL({ extension: "png", forceStatic: false })}` })
+            .setAuthor({ name: `Tag: ${tag} [${foundTag.visibility}]`, iconURL: `${message.guild.iconURL({ extension: "png", forceStatic: false })}` })
             .addFields([
                 {
                     name: "Content",

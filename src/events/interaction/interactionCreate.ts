@@ -15,10 +15,11 @@ export default class extends Event {
 
     async execute(interaction: Interaction<"cached">) {
         if(interaction.isModalSubmit()) {
-            if(interaction.customId === "tag_create") {
+            const guildData = this.client.configs.get(interaction.guild.id);
+
+            if(interaction.customId === `tag_create_${interaction.user.id}`) {
                 const nameInput = interaction.fields.getTextInputValue("tag_create_name");
-                const guildData = await this.client.database.getGuild(interaction.guild?.id);
-                const nameBusy = guildData.custom_commands.find((cmd) => cmd.name === nameInput)
+                const nameBusy = guildData?.customCommands?.find((cmd) => cmd.name === nameInput)
 
                 if(nameBusy || this.client.commands.has(nameInput)) {
                     return interaction.reply({ content: `There is already a tag or a command with name \`${nameInput}\`.`, ephemeral: true })
@@ -84,7 +85,7 @@ export default class extends Event {
                     }).catch(() => { });
 
                     let data = {
-                        id: interaction.guild.id,
+                        guildId: interaction.guild.id,
                         author: interaction.user.id,
                         name: interaction.fields.getTextInputValue('tag_create_name'),
                         description: interaction.fields.getTextInputValue('tag_create_description') || null,
@@ -102,8 +103,7 @@ export default class extends Event {
                     }).catch(() => { });
 
                     await this.client.database.updateGuild(interaction.guild.id, {
-                        id: interaction.guild.id,
-                        custom_commands: guildData.custom_commands.length ? [...guildData.custom_commands, data] : [data]
+                        customCommands: guildData?.customCommands ? [...guildData.customCommands, data] : [data]
                     })
 
                     i.editReply({
@@ -114,7 +114,61 @@ export default class extends Event {
                         ]
                     })
                 });
-            }
+            } else if(interaction.customId === `tag_edit_${interaction.user.id}`) {
+                const availableTags = guildData?.customCommands;
+                const input = interaction.fields.getTextInputValue("tag_edit_name");
+                const foundTag = availableTags?.find((tag) => tag.name.toLowerCase() === input.toLowerCase());
+
+                if (!foundTag) {
+                    return interaction.reply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setDescription(`Couldn't find the tag \`${input}\`..`)
+                                .setColor("Red")
+                        ],
+                        ephemeral: true
+                    });
+                }
+
+                if (foundTag.author !== interaction.user.id) return interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setDescription("You can't edit this tag as you're not the owner of it.")
+                    ],
+                    ephemeral: true
+                });
+
+                await interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setDescription(`Updating the tag...`)
+                            .setColor("Grey")
+                    ],
+                    ephemeral: true
+                });
+
+                const data = {
+                    guildId: interaction.guild.id,
+                    author: interaction.user.id,
+                    name: interaction.fields.getTextInputValue('tag_edit_name'),
+                    description: interaction.fields.getTextInputValue('tag_edit_description') || foundTag.description,
+                    response: interaction.fields.getTextInputValue('tag_edit_content'),
+                    createdAt: foundTag.createdAt,
+                    visibility: foundTag.visibility
+                };
+
+                await this.client.database.updateGuild(interaction.guild.id, {
+                    customCommands: [...<[]>guildData?.customCommands?.filter((cmd) => cmd.name !== data.name), data]
+                })
+
+                interaction.editReply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setDescription(`Successfully updated the tag \`${interaction.fields.getTextInputValue('tag_edit_name')}\`!`)
+                            .setColor('Yellow')
+                    ]
+                });
+            };
         }
     }
 }

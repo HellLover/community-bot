@@ -18,33 +18,27 @@ export default class extends Command {
 
       try {
         
-        const cmdName = args[0];
-        const guild = await this.client.database.getGuild(message.guild!.id);
-        const commands = guild.custom_commands;
+          const cmdName = args[0];
+          const guild = this.client.configs.get(message.guild!.id);
+          const commands = guild?.customCommands;
 
-        if (!cmdName) {
-            return message.channel.send({ content: `You need to provide the name of the tag you want to delete (\`${this.usage}\`).` });
-        }
+          if (!cmdName) {
+              return message.reply({ content: `You need to provide the name of the tag you want to delete (\`${this.usage}\`).` });
+          }
 
-        if (commands) {
-            const data = commands.find((cmd) => cmd.name === cmdName.toLowerCase());
-      
-            if (!data) {
-              return message.channel.send({ content: `${this.client.customEmojis.error} | Couldn't find the tag \`${cmdName}\`` });
-            }
-      
-            const filtered = commands.filter(
-              (cmd) => cmd.name !== cmdName.toLowerCase()
-            );
-      
-            await this.client.database.updateGuild(message.guild!.id, {
-              custom_commands: filtered,
-            });
-            return message.channel.send({ content: `${this.client.customEmojis.success} | Successfully deleted the tag \`${cmdName}\`` });
-
-          } else {
-            return message.channel.send({ content: `${this.client.customEmojis.error} | Couldn't find the tag \`${cmdName}\`` });
-        }
+          const data = commands?.find((cmd) => cmd.name === cmdName.toLowerCase());
+    
+          if (!data) {
+            return message.reply({ content: `${this.client.customEmojis.error} | Couldn't find the tag \`${cmdName}\`` });
+          }
+    
+          const filtered = commands?.filter((cmd) => cmd.name !== cmdName.toLowerCase());
+    
+          await this.client.database.updateGuild(message.guild!.id, {
+            customCommands: filtered,
+          });
+          
+          return message.channel["success"](`Successfully deleted the tag \`${cmdName}\``);
 
       } catch(e) {
           return message.reply({ content: `An error occured:\n\`\`\`js\n${e}\n\`\`\`` })

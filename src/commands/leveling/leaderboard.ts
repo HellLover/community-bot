@@ -13,6 +13,12 @@ export default class extends Command {
     }
 
     async execute(message: Message<true>, args: any[]) {
+        const positions = {
+            1: "🥇",
+            2: "🥈",
+            3: "🥉"
+        }
+
         let users = (await this.client.levels.all()).filter((v) => v.id.startsWith("xp_"));
         if(!users.length) return message.reply({ content: "The leaderboard is not available yet.." });
 
@@ -24,8 +30,8 @@ export default class extends Command {
             .setTimestamp()
             .setDescription(`${sortedUsers.map((user, i) => {
                 const tag = message.guild.members.cache.get(`${user.id.match(/\d+/)?.[0]}`)?.user.tag ?? "Unknown#0000"
-
-                return `\`${i + 1}.\` ${tag} - Level ${user.value.level}\n${this.progressBar(user.value.xp, user.value.level * 300)}`
+                const position = i + 1;
+                return `${positions[position] ?? `\`${position}\`.`} ${tag} - Level ${user.value.level}\n${this.progressBar(user.value.xp, user.value.level * 300)}`
             }).join("\n")}`)
             .setFooter({ text: `Your position: ${users.findIndex((x) => x.id.match(/\d+/)?.[0] === message.author.id) + 1}`, iconURL: message.author.displayAvatarURL({ forceStatic: false }) })
         return message.reply({ embeds: [embed] })

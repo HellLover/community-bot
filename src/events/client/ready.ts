@@ -1,6 +1,7 @@
 import { Event } from "../../structures/Events";
 import { Client } from "../../handlers/ClientHandler";
-import { ActivityType } from "discord.js";
+import { ActivityType, Collection, Snowflake } from "discord.js";
+import { GuildConfig } from "#entities/Guild";
 
 export default class extends Event {
     constructor(client: Client) {
@@ -14,5 +15,17 @@ export default class extends Event {
             url: "https://www.youtube.com/watch?v=gSo9E5FbbOg&ab_channel=Flameex" 
         })
         this.client?.logger?.log(`[CONNECTION] Connected as ${this.client?.user?.tag}!`);
+
+        try {
+            const guildsConfig = await this.client.database.getAllGuilds();
+            if(!guildsConfig?.length) return;
+            
+            const configs = new Collection<Snowflake, GuildConfig>();
+            guildsConfig?.forEach((conf) => configs.set(conf.guildId, conf))
+    
+            this.client.configs = configs;
+        } catch(e) {
+            this.client.logger.error(`Couldn't update guilds settings: ${e}`);
+        }
     }
 }

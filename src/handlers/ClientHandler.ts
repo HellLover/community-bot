@@ -6,18 +6,18 @@ import ClientUtils from '../utils/utils';
 import { Database } from '../database/Database';
 import { CacheStorage } from '../database/CacheStorage';
 import { Logger } from '../utils/Logger';
-import { config } from "../config";
 import customEmojis from "../../assets/jsons/emojis.json";
 import { QuickDB } from 'quick.db';
+import { GuildConfig } from '#entities/Guild';
 
 export class Client extends DJS.Client {
+    private _commands = new DJS.Collection<any, any>();
+    private _events = new DJS.Collection<any, any>();
+    private _aliases = new DJS.Collection<any, any>();
+    private _cooldowns = new Map<any, any>();
+    private _configs = new DJS.Collection<DJS.Snowflake, Partial<GuildConfig>>();
     database: Database;
     cache: CacheStorage<any>;
-    commands: DJS.Collection<any, any>;
-    events: DJS.Collection<any, any>;
-    aliases: DJS.Collection<any, any>;
-    cooldowns: Map<any, any>;
-    config: typeof config;
     utils: ClientUtils;
     logger: Logger;
     customEmojis: typeof customEmojis;
@@ -35,11 +35,6 @@ export class Client extends DJS.Client {
             allowedMentions: { parse: ["roles", "everyone"], repliedUser: false }
         });
 
-        this.commands = new DJS.Collection();
-        this.events = new DJS.Collection();
-        this.aliases = new DJS.Collection();
-        this.cooldowns = new Map();
-        this.config = config;
         this.utils = new ClientUtils(this);
         this.database = new Database(this);
         this.cache = new CacheStorage();
@@ -48,11 +43,34 @@ export class Client extends DJS.Client {
         this.levels = new QuickDB();
     }
 
+    get commands() {
+        return this._commands;
+    }
+
+    get aliases() {
+        return this._aliases;
+    }
+
+    get events() {
+        return this._events;
+    }
+
+    get cooldowns() {
+        return this._cooldowns;
+    }
+
+    get configs() {
+        return this._configs;
+    }
+    set configs(newConfig: DJS.Collection<DJS.Snowflake, Partial<GuildConfig>>) {
+        this._configs = newConfig;
+    }
+
     async register(token: string) {
-        super.login(token);
-        CommandHandler(this);
-        EventHandler(this)
         await this.database.connect();
+        await super.login(token);
+        await CommandHandler(this);
+        await EventHandler(this)
     }
 
 }

@@ -8,21 +8,23 @@ export default class extends Event {
         super(client, "messageCreate");
     }
 
-    async execute(message: DJS.Message) {
+    async execute(message: DJS.Message<true>) {
         if (message.author.bot || !message.guild) return;
-        if(message.channel.type === ChannelType.DM) return;
         if(!message.channel.permissionsFor(message.guild.members.me as DJS.GuildMember).has(["SendMessages", "ViewChannel"])) return;
 
-        const GuildData = await this.client.database.getGuild(message.guild?.id);
+        const GuildData = this.client.configs.get(message.guildId);
+        if(!GuildData) {
+            await this.client.database.addGuild(message.guildId);
+        }
 
-        let prefix = GuildData.prefix;
-        let customCmds = GuildData.custom_commands;
+        let prefix = GuildData?.prefix;
+        let customCmds = GuildData?.customCommands;
 
         if(message.content.match(new RegExp(`^<@!?${this.client?.user?.id}>( |)$`))){
             return message.reply({ embeds: [{ color: DJS.Colors.Red, description: `My prefix for this server is \`${prefix}\`!` }] })
         }
 
-        if(GuildData.leveling.enabled) {
+        if(GuildData?.leveling) {
             const userLevelData = await this.client.levels.get<Record<"xp" | "level", number>>(`xp_${message.author.id}_${message.guild.id}`);
             if(!userLevelData) return this.client.levels.set(`xp_${message.author.id}_${message.guild.id}`, {
                 xp: 0,
@@ -52,11 +54,11 @@ export default class extends Event {
   
         if (!message.content.toLowerCase().startsWith(`${prefix}`)) return;
 
-        let args = message.content.slice(prefix.length).trim().split(/ +/g);
+        let args = message.content.slice(prefix?.length).trim().split(/ +/g);
         let cmd = args?.shift()?.toLowerCase();
         const command = this.client.commands.get(cmd) || this.client.commands.get(this.client.aliases.get(cmd));
         
-        if (customCmds.length) {
+        if (customCmds) {
           const customCmd = customCmds.find((x) => x.name === cmd);
           if (customCmd) {
             if(customCmd.visibility === "private" && customCmd.author !== message.author.id) {
@@ -69,7 +71,7 @@ export default class extends Event {
 
         if(!command) return;
 
-        if (command.ownerOnly && message.author.id !== this.client.config.ownerID) {
+        if (command.ownerOnly && message.author.id !== process.env["OWNER_ID"]) {
             return;
         }
 

@@ -16,22 +16,20 @@ export default class extends Command {
 
       try {
         
-        const data = await message.guild?.["fetchSettings"]();
+        const data = this.client.configs.get(message.guildId);
 
-        const customCmds = data.custom_commands;
+        const customCmds = data?.customCommands;
+        if(!customCmds?.length) return message.reply({ content: "There is no tag in this guild yet." })
 
-        if(customCmds.length > 0) {
-            const embed = new EmbedBuilder()
-            .setColor(Colors.LuminousVividPink)
-            .setAuthor({ name: "Tags" })
-            .setDescription(`${customCmds.map((cmd, i) => `\`${i + 1}\`. \`${cmd.name}\` [By \`${message.guild.members.cache.get(cmd.author)?.user.tag ?? "Unknown#0000"}\`]`).join("\n")}`);
-            return message.reply({ embeds: [embed] })
-        } else {
-            return message.reply({ content: "There is no tag in this guild yet." })
-        }
+        const embed = new EmbedBuilder()
+        .setColor(Colors.LuminousVividPink)
+        .setAuthor({ name: "Tags" })
+        .setDescription(`${customCmds.map((cmd, i) => `\`${i + 1}\`. \`${cmd.name}\` [By \`${message.guild.members.cache.get(cmd.author)?.user.tag ?? "Unknown#0000"}\`]`).join("\n")}`);
+        return message.reply({ embeds: [embed] })
         
 
       } catch(e) {
+          console.log(e)
           return message.reply({ content: `An error occured:\n\`\`\`js\n${e}\n\`\`\`` })
       }
 

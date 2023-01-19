@@ -1,10 +1,10 @@
 {
   "name": "community-bot",
-  "version": "2.0.0",
-  "description": "An example bot written in TypeScript & discord.js@13.3.1",
+  "version": "2.1.0",
+  "description": "A community bot for Dolphin's Squad server written in TypeScript & discord.js@14",
   "main": "./src/main.ts",
   "scripts": {
-    "init": "npx ts-node ."
+    "start": "npx ts-node ."
   },
   "engines": {
     "node": "16.x"
@@ -43,7 +43,8 @@
     "ms": "^2.1.3",
     "pretty-ms": "^7.0.1",
     "quick.db": "^9.0.8",
-    "twemoji-parser": "^13.1.0"
+    "twemoji-parser": "^13.1.0",
+    "typeorm": "^0.3.11"
   },
   "peerDependencies": {
     "better-sqlite3": "^8.0.1"
