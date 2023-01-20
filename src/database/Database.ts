@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { EventEmitter } from "events";
-import { Client } from "../handlers/ClientHandler";
+import { Client } from "../structures/Client";
 import { UserConfig } from "./entities/User";
 import { GuildConfig } from "./entities/Guild";
 
@@ -27,7 +27,7 @@ export class Database extends EventEmitter {
 
     connect() {
         return this.dataSource.initialize()
-          .then(() => this.client.logger.log("[DATABASE] Connected to the database!"))
+          .then(() => this.client.logger.log("[DATABASE] Connecting to the database..."))
           .catch((err) => this.client.logger.error(`[DATABASE_ERROR]: ${err}`))
     }
 

@@ -1,7 +1,6 @@
 import { Event } from "../../structures/Events";
-import { Client } from "../../handlers/ClientHandler";
+import { Client } from "../../structures/Client";
 import * as DJS from "discord.js";
-import { ChannelType } from "discord.js";
 
 export default class extends Event {
     constructor(client: Client) {

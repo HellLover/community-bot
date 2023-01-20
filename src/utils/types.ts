@@ -1,7 +1,7 @@
-import { TextChannel, EmbedBuilder, MessageCollectorOptionsParams } from "discord.js";
+import { EmbedBuilder, MessageCollectorOptionsParams, GuildTextBasedChannel } from "discord.js";
 
 export interface EmbedPaginateOptions {
-    channel: TextChannel,
+    channel: GuildTextBasedChannel,
     pages: EmbedBuilder[],
     timeout?: number,
     backEmoji?: string,

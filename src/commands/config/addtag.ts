@@ -1,5 +1,5 @@
 import Command from "../../structures/Commands";
-import { Client } from "../../handlers/ClientHandler";
+import { Client } from "../../structures/Client";
 import { 
     ActionRowBuilder, 
     ButtonBuilder, 

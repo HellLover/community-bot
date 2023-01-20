@@ -1,5 +1,5 @@
 import { PermissionResolvable } from "discord.js";
-import { Client } from "../handlers/ClientHandler";
+import { Client } from "../structures/Client";
 
 interface CommandOptions {
     name?: string;

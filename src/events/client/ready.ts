@@ -1,7 +1,7 @@
 import { Event } from "../../structures/Events";
-import { Client } from "../../handlers/ClientHandler";
+import { Client } from "../../structures/Client";
 import { ActivityType, Collection, Snowflake } from "discord.js";
-import { GuildConfig } from "#entities/Guild";
+import { GuildConfig } from "../../database/entities/Guild";
 
 export default class extends Event {
     constructor(client: Client) {

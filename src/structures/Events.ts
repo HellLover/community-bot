@@ -1,4 +1,4 @@
-import { Client } from "../handlers/ClientHandler";
+import { Client } from "../structures/Client";
 
 export abstract class Event {
     client: Client;

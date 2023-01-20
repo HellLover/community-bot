@@ -8,7 +8,7 @@ import { CacheStorage } from '../database/CacheStorage';
 import { Logger } from '../utils/Logger';
 import customEmojis from "../../assets/jsons/emojis.json";
 import { QuickDB } from 'quick.db';
-import { GuildConfig } from '#entities/Guild';
+import { GuildConfig } from '../database/entities/Guild';
 
 export class Client extends DJS.Client {
     private _commands = new DJS.Collection<any, any>();

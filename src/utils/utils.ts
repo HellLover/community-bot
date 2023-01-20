@@ -1,4 +1,4 @@
-import { Client } from "../handlers/ClientHandler";
+import { Client } from "../structures/Client";
 import * as DJS from "discord.js";
 import { EmbedPaginateOptions } from "./types";
 

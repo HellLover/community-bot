@@ -1,6 +1,6 @@
 import { Event } from "../../structures/Events";
-import { Client } from "../../handlers/ClientHandler";
-import { GuildMember, VoiceChannel } from "discord.js";
+import { Client } from "../../structures/Client";
+import { EmbedBuilder, GuildMember, VoiceChannel } from "discord.js";
 
 export default class extends Event {
     constructor(client: Client) {
@@ -16,6 +16,15 @@ export default class extends Event {
             if(role && !member.roles.cache.has(role.id)) {
                 member.roles.add(role.id).catch(() => {})
             }
+
+            await member.user.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor("#2f3136")
+                        .setTitle(`Welcome to ${member.guild.name}!`)
+                        .setDescription("Feel free to ask questions and chat with our members. Have fun in our server! :)\n\n[Server invite](https://discord.gg/TYhSGhWGvm)\n[Invite Dolphin](https://discord.com/api/oauth2/authorize?client_id=713713873915478036&permissions=8&scope=bot)")
+                ]
+            }).catch(() => {})
 
             const voiceChannels = {
                 totalCount: "1062354998152937523",

@@ -14,9 +14,11 @@
       "checkJs": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
+      "outDir": "./build",
       "paths": {
         "#assets/*": ["./assets/*"],
-        "#entities/*": ["./src/database/entities/*"]
+        "#db/*": ["./src/database/*"],
+        "#utils/*": ["./src/utils/*"]
       }
     }
 }

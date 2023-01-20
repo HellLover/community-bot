@@ -1,5 +1,5 @@
 import { Event } from "../../structures/Events";
-import { Client } from "../../handlers/ClientHandler";
+import { Client } from "../../structures/Client";
 import { 
     ActionRowBuilder, 
     ComponentType, 

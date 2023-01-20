@@ -1,5 +1,5 @@
 import Command from "../../structures/Commands";
-import { Client } from "../../handlers/ClientHandler";
+import { Client } from "../../structures/Client";
 import { EmbedBuilder, ButtonBuilder, ActionRowBuilder, Message, ButtonStyle } from "discord.js";
 import { stripIndents } from "common-tags";
 
@@ -18,7 +18,7 @@ export default class extends Command {
      try {
         const commands = this.client.commands;
         const cmd = args[0];
-        const categories: string[] = [];
+        let categories: string[] = [];
 
         const prefix = this.client.configs.get(message.guildId)?.prefix;
 
@@ -26,6 +26,8 @@ export default class extends Command {
             commands.forEach((command) => {
                 if(!categories.includes(command.category)) categories.push(command.category);
             });
+
+            categories = categories.filter((cat) => cat !== "OwnerOnly");
 
             const embed = new EmbedBuilder()
             .setAuthor({

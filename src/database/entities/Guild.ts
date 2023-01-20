@@ -9,7 +9,7 @@ interface CustomCommandData {
     visibility: string
 }
 
-@Entity({ name: "guild_config" })
+@Entity({ name: "GuildConfig" })
 export class GuildConfig {
     @ObjectIdColumn()
     _id: string

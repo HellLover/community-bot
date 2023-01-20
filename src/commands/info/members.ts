@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
-import { Client } from "../../handlers/ClientHandler";
-import { GuildMember, Message, EmbedBuilder, TextChannel } from "discord.js";
+import { Client } from "../../structures/Client";
+import { Message, EmbedBuilder } from "discord.js";
 import { chunk } from "lodash";
 
 export default class extends Command {
@@ -9,10 +9,11 @@ export default class extends Command {
             description: "Returns all the guild's members.",
             aliases: [],
             category: "Information",
+            cooldown: 20
         })
     }
 
-    async execute(message: Message, args: any[]) {
+    async execute(message: Message<true>, args: any[]) {
         const statusMap = {
             online: "<:online:719630983648772198>",
             idle: "<:idle:719630983782989935>",
@@ -20,7 +21,7 @@ export default class extends Command {
             offline: "<:invisible:719630983770406942>"
         }
 
-        const members = message.guild?.members.cache.map((m: GuildMember) => { return { tag: m.user.tag, id: m.user.id, status: `${statusMap[m.presence?.status! || "offline"]}` }  });
+        const members = message.guild?.members.cache.map((m) => { return { tag: m.user.tag, id: m.user.id, status: `${statusMap[m.presence?.status ?? "offline"]}` }  });
 
         const pages: EmbedBuilder[] = chunk(members, 10).map((data) => {
             return new EmbedBuilder()
@@ -32,7 +33,7 @@ export default class extends Command {
         if(pages.length > 1) {
             return this.client.utils.paginateEmbed(message, {
                 pages,
-                channel: message.channel as TextChannel,
+                channel: message.channel,
                 timeout: 30000,
             })
         }
