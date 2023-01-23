@@ -19,7 +19,7 @@ export default class extends Command {
             3: "🥉"
         }
 
-        let users = (await this.client.levels.all()).filter((v) => v.id.startsWith("xp_"));
+        let users = (await this.client.levels.all()).filter((v) => v.id.startsWith("xp_") && v.id.endsWith(`_${message.guildId}`));
         if(!users.length) return message.reply({ content: "The leaderboard is not available yet.." });
 
         let sortedUsers = users.sort((a, b) => b.value.xp - a.value.xp);
