@@ -12,7 +12,7 @@ export default class extends Command {
     }
 
     async execute(message, args) {
-        const msg = await message.reply({ embeds: [{ color: colors.WHITE, description: "Please wait..." }] })
+        const msg = await message.reply({ embeds: [{ color: "#fff", description: "Please wait..." }] })
         const ping = Math.round(msg.createdTimestamp - message.createdTimestamp);
 
         const duration = time(new Date(`${this.client.readyAt}`), "R");
@@ -20,8 +20,10 @@ export default class extends Command {
         const embed = new EmbedBuilder()
             .setAuthor({ name: `${this.client.user?.username} | Ping panel`, iconURL: this.client.user?.displayAvatarURL() })
             .setColor(message.guild.me.displayHexColor || "BLUE")
-            .addField("🏓 Ping", `\`${ping}\`ms`)
-            .addField("⏲️ Uptime", `Ready since: ${duration}`)
+            .addFields([
+                { name: "🏓 Ping", value: `\`${ping}\`ms` },
+                { name: "⏲️ Uptime", value: `Ready since: ${duration}` }
+            ])
         return msg.edit({ embeds: [embed] })
     }
 }
