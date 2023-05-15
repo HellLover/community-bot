@@ -1,5 +1,6 @@
 import Command from "../../structures/Commands";
-import { Client } from "../../handlers/ClientHandler";
+import { Client } from "../../structures/Client";
+import { MessageEmbed, time } from "discord.js"
 
 export default class extends Command {
     constructor(client: Client) {
@@ -16,7 +17,7 @@ export default class extends Command {
 
         const duration = time(new Date(`${this.client.readyAt}`), "R");
       
-        const embed = new Discord.MessageEmbed()
+        const embed = new MessageEmbed()
             .setAuthor({ name: `${this.client.user?.username} | Ping panel`, iconURL: this.client.user?.displayAvatarURL() })
             .setColor(message.guild.me.displayHexColor || colors.BLUE)
             .addField("🏓 Ping", `\`${ping}\`ms`)
