@@ -19,7 +19,7 @@ export default class extends Command {
       
         const embed = new EmbedBuilder()
             .setAuthor({ name: `${this.client.user?.username} | Ping panel`, iconURL: this.client.user?.displayAvatarURL() })
-            .setColor(message.guild.me.displayHexColor)
+            .setColor(0xfff)
             .addFields([
                 { name: "🏓 Ping", value: `\`${ping}\`ms` },
                 { name: "⏲️ Uptime", value: `Ready since: ${duration}` }
