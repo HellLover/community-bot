@@ -1,6 +1,6 @@
 import Command from "../../structures/Commands";
 import { Client } from "../../structures/Client";
-import { MessageEmbed, time } from "discord.js"
+import { EmbedBuilder, time } from "discord.js"
 
 export default class extends Command {
     constructor(client: Client) {
@@ -17,9 +17,9 @@ export default class extends Command {
 
         const duration = time(new Date(`${this.client.readyAt}`), "R");
       
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setAuthor({ name: `${this.client.user?.username} | Ping panel`, iconURL: this.client.user?.displayAvatarURL() })
-            .setColor(message.guild.me.displayHexColor || colors.BLUE)
+            .setColor(message.guild.me.displayHexColor || "BLUE")
             .addField("🏓 Ping", `\`${ping}\`ms`)
             .addField("⏲️ Uptime", `Ready since: ${duration}`)
         return msg.edit({ embeds: [embed] })
